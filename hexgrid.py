@@ -15,16 +15,6 @@ class Direction(Enum):
     R_NEG = 4
     S_NEG = 5
 
-    def next_clockwise(self):
-        direction_list = list(Direction)
-        self_index = direction_list.index(self)
-        return direction_list[(self_index + 1) % len(direction_list)]
-
-    def next_counterclockwise(self):
-        direction_list = list(Direction)
-        self_index = direction_list.index(self)
-        return direction_list[self_index - 1]
-
 class HexCell:
 
     direction_coord_change = {
@@ -67,7 +57,7 @@ class HexCell:
 
         neighbor = self.hex_grid.get_cell(q, r)
         if not neighbor:
-            neighbor = HexCell(self.hex_grid, coords[0], coords[1])
+            neighbor = HexCell(self.hex_grid, q, r)
         
         return neighbor
 
@@ -95,5 +85,5 @@ class HexGrid:
     def __init__(self):
         pass
 
-    def get_cell(q, r):
+    def get_cell(self, q, r):
         pass

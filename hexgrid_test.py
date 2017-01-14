@@ -3,28 +3,6 @@
 import unittest
 import hexgrid
 
-class DirectionTestCase(unittest.TestCase):
-
-    def test_basic_clockwise(self):
-        self.assertEqual(
-            hexgrid.Direction.S_POS.next_clockwise(),
-            hexgrid.Direction.Q_NEG)
-
-    def test_wrap_clockwise(self):
-        self.assertEqual(
-            hexgrid.Direction.S_NEG.next_clockwise(),
-            hexgrid.Direction.Q_POS)
-
-    def test_basic_counterclockwise(self):
-        self.assertEqual(
-            hexgrid.Direction.Q_NEG.next_counterclockwise(),
-            hexgrid.Direction.S_POS)
-
-    def test_wrap_counterclockwise(self):
-        self.assertEqual(
-            hexgrid.Direction.Q_POS.next_counterclockwise(),
-            hexgrid.Direction.S_NEG)
-
 class HexCellTestCase(unittest.TestCase):
     
     def test_equal(self):
