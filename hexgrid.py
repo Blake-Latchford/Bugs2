@@ -34,6 +34,15 @@ class HexCell:
 
     def __eq__(self, other):
         return self.has_same_coordinates(other)
+    
+    def __hash__(self):
+        return hash((self.q, self.r, self.s))
+    
+    def __str__(self):
+        return "(" + str(self.q) + "," + str(self.r) + "," + str(self.s) + ")"
+
+    def __repr__(self):
+        return str(self)
 
     def has_same_coordinates(self, other):
         return (self.q == other.q and
@@ -54,24 +63,26 @@ class HexCell:
         s = self.s + coord_change[2]
 
         assert q + r + s == 0
-
-        neighbor = self.hex_grid.get_cell(q, r)
-        if not neighbor:
-            neighbor = HexCell(self.hex_grid, q, r)
         
-        return neighbor
+        return self.hex_grid.get_cell(q, r)
 
+    
 
     def breadth_first_search(self, max_distance, filter_function=None):
         search_results = []
         previous_distance_result = [self]
+        visited = set([self])
         
-        for result_index in range(max_distance):
+        for _ in range(max_distance):
             current_distance_result = []
 
             for hex_cell in previous_distance_result:
-                if filter_function and filter_function(hex_cell):
-                    current_distance_result.append(hex_cell)
+                for neighbor in hex_cell.get_neighbors():
+                    if (neighbor not in visited and
+                            filter_function and
+                            filter_function(neighbor)):
+                        current_distance_result.append(neighbor)
+                        visited.add(neighbor)
 
             search_results.append(current_distance_result)
             previous_distance_result = current_distance_result;
@@ -83,7 +94,10 @@ class HexCell:
 
 class HexGrid:
     def __init__(self):
-        pass
+        self.populated_cells = {}
 
     def get_cell(self, q, r):
-        pass
+        coords = (q, r)
+        if coords in self.populated_cells:
+            return self.populated_cells[coords]
+        return HexCell(self, q, r)
