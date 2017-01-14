@@ -39,6 +39,11 @@ class HexCell:
 
     def __eq__(self, other):
         return self.has_same_coordinates(other)
+
+    def has_same_coordinates(self, other):
+        return (self.q == other.q and
+                self.r == other.r and
+                self.s == other.s)
     
     def __hash__(self):
         return hash((self.q, self.r, self.s))
@@ -48,11 +53,6 @@ class HexCell:
 
     def __repr__(self):
         return str(self)
-
-    def has_same_coordinates(self, other):
-        return (self.q == other.q and
-                self.r == other.r and
-                self.s == other.s)
 
     def get_neighbors(self):
         neighbors = []
@@ -74,6 +74,11 @@ class HexCell:
     
 
     def breadth_first_search(self, max_distance, filter_function=None):
+        """Do a breadth first search starting at self and going max_distance
+        hexes away. If filter_funciton is provided it permits forbidding
+        cells from the search. Its argument is the cell to be searched,
+        and if the function returns true it is added to the results.
+        """
         search_results = []
         previous_distance_result = [self]
         visited = set([self])
