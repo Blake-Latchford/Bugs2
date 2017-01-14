@@ -16,8 +16,13 @@ class Direction(Enum):
     S_NEG = 5
 
 class HexCell:
+    """A single cell in a hexagonal grid.
+    
+    Attributes:
+        q, r, s - The coordinates of the hex.
+    """
 
-    direction_coord_change = {
+    _direction_coord_change = {
         Direction.Q_POS : (+1, -1,  0),
         Direction.R_POS : (+1,  0, -1),
         Direction.S_POS : ( 0, +1, -1),
@@ -56,7 +61,7 @@ class HexCell:
         return neighbors
 
     def get_neighbor(self, direction):
-        coord_change = HexCell.direction_coord_change[direction]
+        coord_change = HexCell._direction_coord_change[direction]
 
         q = self.q + coord_change[0]
         r = self.r + coord_change[1]
@@ -91,13 +96,3 @@ class HexCell:
 
     def distance(self, other):
         return (abs(self.q - other.q) + abs(self.r - other.r) + abs(self.s - other.s)) / 2
-
-class HexGrid:
-    def __init__(self):
-        self.populated_cells = {}
-
-    def get_cell(self, q, r):
-        coords = (q, r)
-        if coords in self.populated_cells:
-            return self.populated_cells[coords]
-        return HexCell(self, q, r)
