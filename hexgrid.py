@@ -8,12 +8,12 @@ class Direction(Enum):
     Named as <axis>_<sign>, so Q_POS is in the positive direction
     on the q axis.
     """
-    Q_POS = 1
-    R_POS = 2
-    S_POS = 3
-    Q_NEG = 4
-    R_NEG = 5
-    S_NEG = 6
+    Q_POS = 0
+    R_POS = 1
+    S_POS = 2
+    Q_NEG = 3
+    R_NEG = 4
+    S_NEG = 5
 
     def next_clockwise(self):
         direction_list = list(Direction)
@@ -26,6 +26,16 @@ class Direction(Enum):
         return direction_list[self_index - 1]
 
 class HexCell:
+
+    direction_coord_change = {
+        Direction.Q_POS : (+1, -1,  0),
+        Direction.R_POS : (+1,  0, -1),
+        Direction.S_POS : ( 0, +1, -1),
+        Direction.Q_NEG : (-1, +1,  0),
+        Direction.R_NEG : (-1,  0, +1),
+        Direction.S_NEG : ( 0, -1, +1)
+    }
+
     def __init__(self, hex_grid, q, r):
         self.hex_grid = hex_grid
         self.q = q
@@ -41,17 +51,49 @@ class HexCell:
                 self.s == other.s)
 
     def get_neighbors(self):
-        pass
+        neighbors = []
+        for direction in Direction:
+            neighbors.append(self.get_neighbor(direction))
+        return neighbors
 
     def get_neighbor(self, direction):
-        pass
+        coord_change = HexCell.direction_coord_change[direction]
+
+        q = self.q + coord_change[0]
+        r = self.r + coord_change[1]
+        s = self.s + coord_change[2]
+
+        assert q + r + s == 0
+
+        neighbor = self.hex_grid.get_cell(q, r)
+        if not neighbor:
+            neighbor = HexCell(self.hex_grid, coords[0], coords[1])
+        
+        return neighbor
+
 
     def breadth_first_search(self, max_distance, filter_function=None):
-        pass
+        search_results = []
+        previous_distance_result = [self]
+        
+        for result_index in range(max_distance):
+            current_distance_result = []
+
+            for hex_cell in previous_distance_result:
+                if filter_function and filter_function(hex_cell):
+                    current_distance_result.append(hex_cell)
+
+            search_results.append(current_distance_result)
+            previous_distance_result = current_distance_result;
+
+        return search_results
 
     def distance(self, other):
-        pass
+        return (abs(self.q - other.q) + abs(self.r - other.r) + abs(self.s - other.s)) / 2
 
 class HexGrid:
     def __init__(self):
+        pass
+
+    def get_cell(q, r):
         pass
