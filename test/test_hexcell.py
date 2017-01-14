@@ -2,23 +2,25 @@
 
 import unittest
 import hexcell
+import hexgrid
 
 class HexCellTestCase(unittest.TestCase):
     
+    def setUp(self):
+        self.hex_grid = hexgrid.HexGrid()
+    
     def test_equal(self):
-        hex_grid = hexcell.HexGrid()
-        first = hexcell.HexCell(hex_grid, 1, 2)
-        second = hexcell.HexCell(hex_grid, 1, 2)
-        third = hexcell.HexCell(hex_grid, 2, 2)
+        first = hexcell.HexCell(self.hex_grid, 1, 2)
+        second = hexcell.HexCell(self.hex_grid, 1, 2)
+        third = hexcell.HexCell(self.hex_grid, 2, 2)
 
         self.assertTrue(first == second)
         self.assertFalse(first == third)
 
     def test_not_equal(self):
-        hex_grid = hexcell.HexGrid()
-        first = hexcell.HexCell(hex_grid, 1, 2)
-        second = hexcell.HexCell(hex_grid, 1, 2)
-        third = hexcell.HexCell(hex_grid, 2, 2)
+        first = hexcell.HexCell(self.hex_grid, 1, 2)
+        second = hexcell.HexCell(self.hex_grid, 1, 2)
+        third = hexcell.HexCell(self.hex_grid, 2, 2)
 
         self.assertFalse(first != second)
         self.assertTrue(first != third)
@@ -31,8 +33,7 @@ class HexCellTestCase(unittest.TestCase):
 
 
     def test_breadth_first_search(self):
-        hex_grid = hexcell.HexGrid()
-        origin = hexcell.HexCell(hex_grid, 0, 0)
+        origin = hexcell.HexCell(self.hex_grid, 0, 0)
 
         wall_coords = (
             ( 1, -1 ),
@@ -40,7 +41,7 @@ class HexCellTestCase(unittest.TestCase):
             ( 0, 1 ),
             ( -1, 1 )
         )
-        wall_hexes = [ hexcell.HexCell(hex_grid, q, r)
+        wall_hexes = [ hexcell.HexCell(self.hex_grid, q, r)
             for q, r in wall_coords ]
 
         expected_coords = (
@@ -62,7 +63,7 @@ class HexCellTestCase(unittest.TestCase):
 
         calculated_results = origin.breadth_first_search(2, bfs_filter)
         for distance, calculated_hex_cells in enumerate(calculated_results):
-            expected_hex_cells = [hexcell.HexCell(hex_grid, q, r)
+            expected_hex_cells = [hexcell.HexCell(self.hex_grid, q, r)
                                   for q, r in expected_coords[distance]]
             
             for calculated_hex_cell in calculated_hex_cells:
@@ -74,14 +75,12 @@ class HexCellTestCase(unittest.TestCase):
                               "Missing calculated result.")
     
     def test_hashable(self):
-        hex_grid = hexcell.HexGrid()
-        origin = hexcell.HexCell(hex_grid, 0, 0)
-        non_origin = hexcell.HexCell(hex_grid, 0, 1)
+        origin = hexcell.HexCell(self.hex_grid, 0, 0)
+        non_origin = hexcell.HexCell(self.hex_grid, 0, 1)
         self.assertNotEqual(hash(origin), hash(non_origin))
 
     def test_origin_neighbors(self):
-        hex_grid = hexcell.HexGrid()
-        origin = hexcell.HexCell(hex_grid, 0, 0)
+        origin = hexcell.HexCell(self.hex_grid, 0, 0)
         neighbor_coordinates = (
             ( 1, -1 ),
             ( 1, 0 ),
@@ -90,14 +89,13 @@ class HexCellTestCase(unittest.TestCase):
             ( -1, 0 ),
             ( 0, -1 )
         )
-        neighbor_hexes = [ hexcell.HexCell(hex_grid, q, r)
+        neighbor_hexes = [ hexcell.HexCell(self.hex_grid, q, r)
                           for q, r in neighbor_coordinates ]
 
         self.assertEqual(origin.get_neighbors(), neighbor_hexes)
 
     def test_non_origin_neighbors(self):
-        hex_grid = hexcell.HexGrid()
-        center = hexcell.HexCell(hex_grid, 2, -2)
+        center = hexcell.HexCell(self.hex_grid, 2, -2)
         neighbor_coordinates = (
             ( 3, -3 ),
             ( 3, -2 ),
@@ -106,20 +104,18 @@ class HexCellTestCase(unittest.TestCase):
             ( 1, -2 ),
             ( 2, -3 )
         )
-        neighbor_hexes = [ hexcell.HexCell(hex_grid, q, r)
+        neighbor_hexes = [ hexcell.HexCell(self.hex_grid, q, r)
                           for q, r in neighbor_coordinates ]
 
         self.assertEqual(center.get_neighbors(), neighbor_hexes)
         
     def test_distance_origin_to_origin(self):
-        hex_grid = hexcell.HexGrid()
-        origin = hexcell.HexCell(hex_grid, 0, 0)
+        origin = hexcell.HexCell(self.hex_grid, 0, 0)
         self.assertEqual(origin.distance(origin), 0)
 
     def test_distance_offset_from_origin(self):
-        hex_grid = hexcell.HexGrid()
-        first = hexcell.HexCell(hex_grid, -1, -1)
-        second = hexcell.HexCell(hex_grid, 0, 2)
+        first = hexcell.HexCell(self.hex_grid, -1, -1)
+        second = hexcell.HexCell(self.hex_grid, 0, 2)
         self.assertEqual(first.distance(second), 4)
 
 if __name__ == "__main__":
