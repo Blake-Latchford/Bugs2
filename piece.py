@@ -63,7 +63,7 @@ class Piece(hexcell.HexCell):
             self.PieceType.GRASSHOPPER: self.get_moves_GRASSHOPPER,
             self.PieceType.ANT: self.get_moves_ANT
         }
-        piece_moves[self.piece_type](game_board)
+        return piece_moves[self.piece_type](game_board)
 
     def can_move(self, game_board):
         partitions = [[x] for x in self._get_piece_neighbors(self, game_board)]
@@ -96,8 +96,10 @@ class Piece(hexcell.HexCell):
 
     def get_moves_BEE(self, game_board):
         space_neighbors = self._get_space_neighbors(self, game_board)
-        return (neighbor for neighbor in space_neighbors
-                if self._freedom_to_move(self, neighbor))
+        movable_neighbors = (
+            neighbor for neighbor in space_neighbors
+            if self._freedom_to_move(self, neighbor, game_board))
+        return movable_neighbors
 
     def get_moves_SPIDER(self, game_board):
         raise NotImplementedError
@@ -111,8 +113,23 @@ class Piece(hexcell.HexCell):
     def get_moves_ANT(self, game_board):
         raise NotImplementedError
 
-    def _freedom_to_move(self, start, end):
-        raise NotImplementedError
+    def _freedom_to_move(self, start, end, game_board):
+        diff = end - start
+
+        clockwise_neighbor_hex = (
+            diff.rotate_clockwise_about_origin() + start)
+        counterclockwise_neighbor_hex = (
+            diff.rotate_counterclockwise_about_origin() + start)
+
+        clockwise_neighbor = game_board.get_cell(
+            clockwise_neighbor_hex.q,
+            clockwise_neighbor_hex.r)
+        counterclockwise_neighbor = game_board.get_cell(
+            counterclockwise_neighbor_hex.q,
+            counterclockwise_neighbor_hex.r)
+
+        return (self._is_piece(clockwise_neighbor) !=
+                self._is_piece(counterclockwise_neighbor))
 
     def _get_piece_neighbors(self, hex_cell, game_board):
         return {x for x in hex_cell.get_neighbors(game_board)
@@ -120,7 +137,7 @@ class Piece(hexcell.HexCell):
 
     def _get_space_neighbors(self, hex_cell, game_board):
         return {x for x in hex_cell.get_neighbors(game_board)
-                if Piece._is_piece(x)}
+                if Piece._is_space(x)}
 
     @classmethod
     def _is_piece(cls, hex_cell):

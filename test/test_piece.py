@@ -155,40 +155,33 @@ class PieceTestCase(unittest.TestCase):
             (-2, 2),
             (-3, 2),
             (-3, 1),
-            (-4, 1),
-            (-5, 1))
+            (-4, 1))
 
         self.assert_move_coords(calculated_moves, expected_move_coords)
 
     def assert_move_coords(self, calculated_moves, expected_move_coords):
-        expected_move_hexes = [hexcell.HexCell(q, r)
-                               for q, r in expected_move_coords]
+        expected_moves = [hexcell.HexCell(q, r)
+                          for q, r in expected_move_coords]
 
         missing_moves = []
-        for expected_move_hex in expected_move_hexes:
-            matching_calculated_moves = [
-                x for x in calculated_moves
-                if x.has_same_coordinates(expected_move_hex)]
+        for expected_move in expected_moves:
+            matched_calculated_move = next(
+                (x for x in calculated_moves
+                 if not x.has_same_coordinates(expected_move)),
+                None)
 
-            # This should never happen. Doesn't make sense.
-            self.assertLess(len(matching_calculated_moves), 2)
-
-            if not matching_calculated_moves:
-                missing_moves.append(expected_move_hex)
+            if not matched_calculated_move:
+                missing_moves.append(expected_move)
 
         extra_moves = []
-        for calculated_move_hex in calculated_moves:
-            matching_expected_moves = [
-                x for x in calculated_moves
-                if x.has_same_coordinates(matching_expected_moves)]
+        for calculated_move in calculated_moves:
+            matched_expected_move = next(
+                (x for x in expected_moves
+                 if not x.has_same_coordinates(calculated_move)),
+                None)
 
-            # This should never happen. Doesn't make sense.
-            self.assertLess(len(matching_expected_moves), 2)
-
-            if not matching_expected_moves:
-                missing_moves.append(expected_move_hex)
-
-        extra_moves = calculated_moves_set - expected_move_hexes_set
+            if not matched_expected_move:
+                extra_moves.append(calculated_move)
 
         self.assertFalse(missing_moves, "Missed moves.")
         self.assertFalse(extra_moves, "Extra moves.")
