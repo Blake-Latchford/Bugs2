@@ -75,21 +75,29 @@ class HexGrid:
 
     def breadth_first_search(self, start, max_distance, filter_function=None):
         """Do a breadth first search from start and going max_distance
-        hexes away. If filter_funciton is provided it permits forbidding
-        cells from the search. Its argument is the cell to be searched,
-        and if the function returns true it is added to the results.
+        hexes away.
+
+        Arguments:
+            start - HexCell at which to start the search.
+            max_distance - Maximum Manhattan distance to search.
+            filter_function - If specified, then can be used to prevent hexes
+                from being accepted in a search. Expected signature is:
+                filter_function(hex_cell, distance) -> bool
+                If the return value is true, hex_cell is added to the results.
+                distance is the Manhattan distance from start.
         """
         search_results = []
         previous_distance_result = [start]
         visited = set([start])
 
-        for _ in range(max_distance):
+        for search_results_index in range(max_distance):
+            distance = search_results_index + 1
             current_distance_result = []
 
             for hex_cell in previous_distance_result:
                 for neighbor in self.get_neighbors(hex_cell):
                     if (neighbor not in visited and
-                            (not filter_function or filter_function(neighbor))):
+                            (not filter_function or filter_function(neighbor, distance))):
                         current_distance_result.append(neighbor)
                         visited.add(neighbor)
 

@@ -23,7 +23,7 @@ class HexGridTestCase(unittest.TestCase):
         self.assertEqual(first_unregistered_cell, second_unregistered_cell)
         self.assertIsNot(first_unregistered_cell, second_unregistered_cell)
 
-    def breadth_first_wall_filter(self, wall_hexes, hex_cell):
+    def breadth_first_wall_filter(self, wall_hexes, hex_cell, distance):
         if hex_cell in wall_hexes:
             return False
         return True
@@ -69,8 +69,8 @@ class HexGridTestCase(unittest.TestCase):
             )
         )
 
-        bfs_filter = lambda hex_cell: \
-            self.breadth_first_wall_filter(wall_hexes, hex_cell)
+        bfs_filter = lambda hex_cell, distance: \
+            self.breadth_first_wall_filter(wall_hexes, hex_cell, distance)
 
         self.assert_breadth_first_search(
             expected_coords,
