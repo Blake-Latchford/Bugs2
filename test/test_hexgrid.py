@@ -23,7 +23,14 @@ class HexGridTestCase(unittest.TestCase):
         self.assertEqual(first_unregistered_cell, second_unregistered_cell)
         self.assertIsNot(first_unregistered_cell, second_unregistered_cell)
 
-    def breadth_first_wall_filter(self, wall_hexes, hex_cell, distance):
+    def test_reset(self):
+        hex_cell = self.hex_grid.get_cell(0, 1)
+        self.hex_grid.register_cell(hex_cell)
+        self.hex_grid.reset()
+
+        self.assertIsNot(hex_cell, self.hex_grid.get_cell(0, 1))
+
+    def breadth_first_wall_filter(self, wall_hexes, hex_cell, unused):
         if hex_cell in wall_hexes:
             return False
         return True

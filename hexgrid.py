@@ -53,6 +53,9 @@ class HexGrid:
 
         self._populated_cells[(hex_cell.q, hex_cell.r)] = hex_cell
 
+    def reset(self):
+        self._populated_cells = {}
+
     def get_neighbors(self, hex_cell):
         """Get the set of cells adjacent to hex_cell"""
         neighbors = []
