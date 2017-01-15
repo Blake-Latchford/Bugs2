@@ -98,7 +98,21 @@ class Piece(hexcell.HexCell):
         return self._get_freedom_to_move_neighbors(self, game_board)
 
     def get_moves_SPIDER(self, game_board):
-        raise NotImplementedError
+        visited = {self}
+        previous_search_results = {self}
+
+        for _ in range(3):
+            next_search_results = set()
+            for previous_search_result in previous_search_results:
+                free_neighbors = self._get_freedom_to_move_neighbors(
+                    previous_search_result, game_board)
+                for neighbor in free_neighbors:
+                    if neighbor not in visited:
+                        next_search_results.add(neighbor)
+                        visited.add(neighbor)
+            previous_search_results = next_search_results
+
+        return previous_search_results
 
     def get_moves_BEETLE(self, game_board):
         raise NotImplementedError
