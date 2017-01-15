@@ -3,7 +3,7 @@
 
 class HexCell:
     """A single cell in a hexagonal grid.
-    
+
     Attributes:
         q, r, s - The coordinates of the hex.
     """
@@ -20,10 +20,10 @@ class HexCell:
         return (self.q == other.q and
                 self.r == other.r and
                 self.s == other.s)
-    
+
     def __hash__(self):
         return hash((self.q, self.r, self.s))
-    
+
     def __str__(self):
         return "(" + str(self.q) + "," + str(self.r) + "," + str(self.s) + ")"
 

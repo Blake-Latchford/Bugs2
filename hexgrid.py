@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
-from hexcell import HexCell
+
 from enum import Enum, unique
+from hexcell import HexCell
+
 
 @unique
 class Direction(Enum):
@@ -16,34 +18,35 @@ class Direction(Enum):
     R_NEG = 4
     S_NEG = 5
 
+
 class HexGrid:
-    
+
     _direction_coord_change = {
-        Direction.Q_POS : (+1, -1,  0),
-        Direction.R_POS : (+1,  0, -1),
-        Direction.S_POS : ( 0, +1, -1),
-        Direction.Q_NEG : (-1, +1,  0),
-        Direction.R_NEG : (-1,  0, +1),
-        Direction.S_NEG : ( 0, -1, +1)
+        Direction.Q_POS: (+1, -1,  0),
+        Direction.R_POS: (+1,  0, -1),
+        Direction.S_POS: (0, +1, -1),
+        Direction.Q_NEG: (-1, +1,  0),
+        Direction.R_NEG: (-1,  0, +1),
+        Direction.S_NEG: (0, -1, +1)
     }
-    
+
     def __init__(self):
         self._populated_cells = {}
 
     def get_cell(self, q, r):
         """Get the cell at the specified coordinates. If no cell is registered
         at that location, create a temporary new cell."""
-        
+
         coords = (q, r)
         if coords in self._populated_cells:
             return self._populated_cells[coords]
         return HexCell(q, r)
-    
+
     def register_cell(self, hex_cell):
         """Register a hex cell to be retained in the grid."""
-        
+
         self._populated_cells[(hex_cell.q, hex_cell.r)] = hex_cell
-        
+
     def get_neighbors(self, hex_cell):
         neighbors = []
         for direction in Direction:
@@ -58,7 +61,7 @@ class HexGrid:
         s = hex_cell.s + coord_change[2]
 
         assert q + r + s == 0
-        
+
         return self.get_cell(q, r)
 
     def breadth_first_search(self, start, max_distance, filter_function=None):
@@ -70,7 +73,7 @@ class HexGrid:
         search_results = []
         previous_distance_result = [start]
         visited = set([start])
-        
+
         for _ in range(max_distance):
             current_distance_result = []
 
@@ -82,6 +85,6 @@ class HexGrid:
                         visited.add(neighbor)
 
             search_results.append(current_distance_result)
-            previous_distance_result = current_distance_result;
+            previous_distance_result = current_distance_result
 
         return search_results

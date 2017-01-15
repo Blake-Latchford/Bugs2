@@ -4,8 +4,9 @@ import unittest
 import hexcell
 import hexgrid
 
+
 class HexCellTestCase(unittest.TestCase):
-    
+
     def test_equal(self):
         first = hexcell.HexCell(1, 2)
         second = hexcell.HexCell(1, 2)
@@ -21,12 +22,12 @@ class HexCellTestCase(unittest.TestCase):
 
         self.assertFalse(first != second)
         self.assertTrue(first != third)
-    
+
     def test_hashable(self):
         origin = hexcell.HexCell(0, 0)
         non_origin = hexcell.HexCell(0, 1)
         self.assertNotEqual(hash(origin), hash(non_origin))
-        
+
     def test_distance_origin_to_origin(self):
         origin = hexcell.HexCell(0, 0)
         self.assertEqual(origin.distance(origin), 0)
