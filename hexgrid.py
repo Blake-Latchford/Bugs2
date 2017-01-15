@@ -20,6 +20,11 @@ class Direction(Enum):
 
 
 class HexGrid:
+    """A grid of HexCells.
+    Registered cells are preserved. As this represents the entire infinite hex
+    plane, any cell can be gotten. However, only registered cells are guaranteed
+    to be identical on future calls.
+    """
 
     _direction_coord_change = {
         Direction.Q_POS: (+1, -1,  0),
@@ -44,16 +49,20 @@ class HexGrid:
 
     def register_cell(self, hex_cell):
         """Register a hex cell to be retained in the grid."""
+        assert (hex_cell.q, hex_cell.r) not in self._populated_cells
 
         self._populated_cells[(hex_cell.q, hex_cell.r)] = hex_cell
 
     def get_neighbors(self, hex_cell):
+        """Get the set of cells adjacent to hex_cell"""
         neighbors = []
         for direction in Direction:
             neighbors.append(self.get_neighbor(hex_cell, direction))
         return neighbors
 
     def get_neighbor(self, hex_cell, direction):
+        """Get the HexCell adjacent to hex_cell in the specified direction."""
+
         coord_change = self._direction_coord_change[direction]
 
         q = hex_cell.q + coord_change[0]

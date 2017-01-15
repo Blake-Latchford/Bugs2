@@ -17,6 +17,7 @@ class HexCell:
         return self.has_same_coordinates(other)
 
     def has_same_coordinates(self, other):
+        """Same as __eq__, but accessible for derived classes."""
         return (self.q == other.q and
                 self.r == other.r and
                 self.s == other.s)
@@ -31,4 +32,8 @@ class HexCell:
         return str(self)
 
     def distance(self, other):
-        return (abs(self.q - other.q) + abs(self.r - other.r) + abs(self.s - other.s)) / 2
+        return (
+            abs(self.q - other.q) +
+            abs(self.r - other.r) +
+            abs(self.s - other.s)
+        ) / 2
