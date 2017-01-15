@@ -56,12 +56,15 @@ class HexCell:
     def __repr__(self):
         return str(self)
 
+    def __sub__(self, other):
+        return HexCell(
+            self.q - other.q,
+            self.r - other.r
+        )
+
     def distance(self, other):
-        return (
-            abs(self.q - other.q) +
-            abs(self.r - other.r) +
-            abs(self.s - other.s)
-        ) / 2
+        diff = self - other
+        return (abs(diff.q) + abs(diff.r) + abs(diff.s)) / 2
 
     def get_neighbors(self, hex_grid):
         """Get the set of cells adjacent to hex_cell"""

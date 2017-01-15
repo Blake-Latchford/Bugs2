@@ -23,6 +23,27 @@ class HexCellTestCase(unittest.TestCase):
         self.assertFalse(first != second)
         self.assertTrue(first != third)
 
+    def test_difference_zero(self):
+        first = hexcell.HexCell(0, 0)
+        second = hexcell.HexCell(0, 0)
+        expected_result = hexcell.HexCell(0, 0)
+
+        self.assertEqual(first - second, expected_result)
+
+    def test_difference_neighbor(self):
+        first = hexcell.HexCell(0, 0)
+        second = hexcell.HexCell(0, 1)
+        expected_result = hexcell.HexCell(0, -1)
+
+        self.assertEqual(first - second, expected_result)
+
+    def test_difference_oddball(self):
+        first = hexcell.HexCell(-1, 0)
+        second = hexcell.HexCell(1, 1)
+        expected_result = hexcell.HexCell(-2, -1)
+
+        self.assertEqual(first - second, expected_result)
+
     def test_hashable(self):
         origin = hexcell.HexCell(0, 0)
         non_origin = hexcell.HexCell(0, 1)
