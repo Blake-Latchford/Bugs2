@@ -95,11 +95,7 @@ class Piece(hexcell.HexCell):
         return len(partitions) == 1
 
     def get_moves_BEE(self, game_board):
-        space_neighbors = self._get_space_neighbors(self, game_board)
-        movable_neighbors = (
-            neighbor for neighbor in space_neighbors
-            if self._freedom_to_move(self, neighbor, game_board))
-        return movable_neighbors
+        return self._get_freedom_to_move_neighbors(self, game_board)
 
     def get_moves_SPIDER(self, game_board):
         raise NotImplementedError
@@ -112,6 +108,21 @@ class Piece(hexcell.HexCell):
 
     def get_moves_ANT(self, game_board):
         raise NotImplementedError
+
+    def _get_piece_neighbors(self, hex_cell, game_board):
+        return {x for x in hex_cell.get_neighbors(game_board)
+                if Piece._is_piece(x)}
+
+    def _get_space_neighbors(self, hex_cell, game_board):
+        return {x for x in hex_cell.get_neighbors(game_board)
+                if Piece._is_space(x)}
+
+    def _get_freedom_to_move_neighbors(self, hex_cell, game_board):
+        space_neighbors = self._get_space_neighbors(hex_cell, game_board)
+        movable_neighbors = (
+            neighbor for neighbor in space_neighbors
+            if self._freedom_to_move(self, neighbor, game_board))
+        return movable_neighbors
 
     def _freedom_to_move(self, start, end, game_board):
         diff = end - start
@@ -130,14 +141,6 @@ class Piece(hexcell.HexCell):
 
         return (self._is_piece(clockwise_neighbor) !=
                 self._is_piece(counterclockwise_neighbor))
-
-    def _get_piece_neighbors(self, hex_cell, game_board):
-        return {x for x in hex_cell.get_neighbors(game_board)
-                if Piece._is_piece(x)}
-
-    def _get_space_neighbors(self, hex_cell, game_board):
-        return {x for x in hex_cell.get_neighbors(game_board)
-                if Piece._is_space(x)}
 
     @classmethod
     def _is_piece(cls, hex_cell):
