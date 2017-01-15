@@ -44,6 +44,13 @@ class HexCellTestCase(unittest.TestCase):
 
         self.assertEqual(first - second, expected_result)
 
+    def test_addition(self):
+        first = hexcell.HexCell(2, 0)
+        second = hexcell.HexCell(3, -5)
+        expected_result = hexcell.HexCell(5, -5)
+
+        self.assertEqual(first + second, expected_result)
+
     def test_hashable(self):
         origin = hexcell.HexCell(0, 0)
         non_origin = hexcell.HexCell(0, 1)

@@ -62,6 +62,12 @@ class HexCell:
             self.r - other.r
         )
 
+    def __add__(self, other):
+        return HexCell(
+            self.q + other.q,
+            self.r + other.r
+        )
+
     def rotate_clockwise_about_origin(self):
         return HexCell(-self.s, -self.q)
 
