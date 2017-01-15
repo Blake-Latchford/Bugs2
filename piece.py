@@ -115,11 +115,11 @@ class Piece(hexcell.HexCell):
         raise NotImplementedError
 
     def _get_piece_neighbors(self, hex_cell, game_board):
-        return {x for x in game_board.get_neighbors(hex_cell)
+        return {x for x in hex_cell.get_neighbors(game_board)
                 if Piece._is_piece(x)}
 
     def _get_space_neighbors(self, hex_cell, game_board):
-        return {x for x in game_board.get_neighbors(hex_cell)
+        return {x for x in hex_cell.get_neighbors(game_board)
                 if Piece._is_piece(x)}
 
     @classmethod

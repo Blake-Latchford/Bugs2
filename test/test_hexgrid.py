@@ -101,33 +101,3 @@ class HexGridTestCase(unittest.TestCase):
         self.assert_breadth_first_search(
             expected_coords,
             calculated_coords)
-
-    def test_origin_neighbors(self):
-        origin = self.hex_grid.get_cell(0, 0)
-        neighbor_coordinates = (
-            (1, -1),
-            (1, 0),
-            (0, 1),
-            (-1, 1),
-            (-1, 0),
-            (0, -1)
-        )
-        neighbor_hexes = [self.hex_grid.get_cell(q, r)
-                          for q, r in neighbor_coordinates]
-
-        self.assertEqual(self.hex_grid.get_neighbors(origin), neighbor_hexes)
-
-    def test_non_origin_neighbors(self):
-        center = self.hex_grid.get_cell(2, -2)
-        neighbor_coordinates = (
-            (3, -3),
-            (3, -2),
-            (2, -1),
-            (1, -1),
-            (1, -2),
-            (2, -3)
-        )
-        neighbor_hexes = [self.hex_grid.get_cell(q, r)
-                          for q, r in neighbor_coordinates]
-
-        self.assertEqual(self.hex_grid.get_neighbors(center), neighbor_hexes)
