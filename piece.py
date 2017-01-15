@@ -115,7 +115,10 @@ class Piece(hexcell.HexCell):
         return previous_search_results
 
     def get_moves_BEETLE(self, game_board):
-        raise NotImplementedError
+        moves = set(self._get_freedom_to_move_neighbors(self, game_board))
+        moves.union(self._get_piece_neighbors(self, game_board))
+
+        return moves
 
     def get_moves_GRASSHOPPER(self, game_board):
         raise NotImplementedError
