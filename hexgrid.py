@@ -1,8 +1,32 @@
 #!/usr/bin/env python3
 
 from hexcell import HexCell
+from enum import Enum, unique
+
+@unique
+class Direction(Enum):
+    """The six cardinal directions on a hexigonal grid
+    Named as <axis>_<sign>, so Q_POS is in the positive direction
+    on the q axis.
+    """
+    Q_POS = 0
+    R_POS = 1
+    S_POS = 2
+    Q_NEG = 3
+    R_NEG = 4
+    S_NEG = 5
 
 class HexGrid:
+    
+    _direction_coord_change = {
+        Direction.Q_POS : (+1, -1,  0),
+        Direction.R_POS : (+1,  0, -1),
+        Direction.S_POS : ( 0, +1, -1),
+        Direction.Q_NEG : (-1, +1,  0),
+        Direction.R_NEG : (-1,  0, +1),
+        Direction.S_NEG : ( 0, -1, +1)
+    }
+    
     def __init__(self):
         self._populated_cells = {}
 
@@ -13,9 +37,51 @@ class HexGrid:
         coords = (q, r)
         if coords in self._populated_cells:
             return self._populated_cells[coords]
-        return HexCell(self, q, r)
+        return HexCell(q, r)
     
     def register_cell(self, hex_cell):
         """Register a hex cell to be retained in the grid."""
         
         self._populated_cells[(hex_cell.q, hex_cell.r)] = hex_cell
+        
+    def get_neighbors(self, hex_cell):
+        neighbors = []
+        for direction in Direction:
+            neighbors.append(self.get_neighbor(hex_cell, direction))
+        return neighbors
+
+    def get_neighbor(self, hex_cell, direction):
+        coord_change = self._direction_coord_change[direction]
+
+        q = hex_cell.q + coord_change[0]
+        r = hex_cell.r + coord_change[1]
+        s = hex_cell.s + coord_change[2]
+
+        assert q + r + s == 0
+        
+        return self.get_cell(q, r)
+
+    def breadth_first_search(self, start, max_distance, filter_function=None):
+        """Do a breadth first search from start and going max_distance
+        hexes away. If filter_funciton is provided it permits forbidding
+        cells from the search. Its argument is the cell to be searched,
+        and if the function returns true it is added to the results.
+        """
+        search_results = []
+        previous_distance_result = [start]
+        visited = set([start])
+        
+        for _ in range(max_distance):
+            current_distance_result = []
+
+            for hex_cell in previous_distance_result:
+                for neighbor in self.get_neighbors(hex_cell):
+                    if (neighbor not in visited and
+                            (not filter_function or filter_function(neighbor))):
+                        current_distance_result.append(neighbor)
+                        visited.add(neighbor)
+
+            search_results.append(current_distance_result)
+            previous_distance_result = current_distance_result;
+
+        return search_results
