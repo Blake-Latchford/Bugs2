@@ -62,6 +62,12 @@ class HexCell:
             self.r - other.r
         )
 
+    def rotate_clockwise_about_origin(self):
+        return HexCell(-self.s, -self.q)
+
+    def rotate_counterclockwise_about_origin(self):
+        return HexCell(-self.r, -self.s)
+
     def distance(self, other):
         diff = self - other
         return (abs(diff.q) + abs(diff.r) + abs(diff.s)) / 2

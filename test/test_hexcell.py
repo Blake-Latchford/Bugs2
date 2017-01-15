@@ -49,6 +49,20 @@ class HexCellTestCase(unittest.TestCase):
         non_origin = hexcell.HexCell(0, 1)
         self.assertNotEqual(hash(origin), hash(non_origin))
 
+    def test_rotate_clockwise(self):
+        original = hexcell.HexCell(-2, -1)
+        expected_result = hexcell.HexCell(-3, 2)
+        calculated_result = original.rotate_clockwise_about_origin()
+
+        self.assertEqual(expected_result, calculated_result)
+
+    def test_rotate_counterclockwise(self):
+        original = hexcell.HexCell(-2, -1)
+        expected_result = hexcell.HexCell(1, -3)
+        calculated_result = original.rotate_counterclockwise_about_origin()
+
+        self.assertEqual(expected_result, calculated_result)
+
     def test_distance_origin_to_origin(self):
         origin = hexcell.HexCell(0, 0)
         self.assertEqual(origin.distance(origin), 0)
