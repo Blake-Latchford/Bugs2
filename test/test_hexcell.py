@@ -2,7 +2,6 @@
 
 import unittest
 import hexcell
-import hexgrid
 
 
 class HexCellTestCase(unittest.TestCase):
