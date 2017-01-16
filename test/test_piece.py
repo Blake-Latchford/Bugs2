@@ -153,9 +153,7 @@ class PieceTestCase(unittest.TestCase):
             (-1, 3),
             (-2, 3),
             (-2, 2),
-            (-3, 2),
-            (-3, 1),
-            (-4, 1))
+            (-3, 2))
 
         self.assert_move_coords(calculated_moves, expected_move_coords)
 
