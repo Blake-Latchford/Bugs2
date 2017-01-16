@@ -80,7 +80,24 @@ class Piece(hexcell.HexCell):
         return piece_moves[self.piece_type](game_board)
 
     def _get_placements(self, game_board):
-        raise NotImplementedError
+        open_neighbors = set()
+        non_enemy_adjacent_open_neighbors = set()
+
+        for piece in game_board.get_placed_pieces(self.color):
+            for open_neighbor in piece._get_space_neighbors(piece, game_board):
+                open_neighbors.add(open_neighbor)
+
+        for open_neighbor in open_neighbors:
+            for neighbor_adjacent in open_neighbor.get_neighbors(game_board):
+                try:
+                    if neighbor_adjacent.color != self.color:
+                        break
+                except AttributeError:
+                    continue
+            else:
+                non_enemy_adjacent_open_neighbors.add(open_neighbor)
+
+        return non_enemy_adjacent_open_neighbors
 
     def can_move(self, game_board):
         partitions = [[x] for x in self._get_piece_neighbors(self, game_board)]
