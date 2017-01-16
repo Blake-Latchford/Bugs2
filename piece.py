@@ -121,7 +121,17 @@ class Piece(hexcell.HexCell):
         return moves
 
     def get_moves_GRASSHOPPER(self, game_board):
-        raise NotImplementedError
+        viable_landing_locations = set()
+        for direction in hexcell.Direction:
+            next_landing_location = self
+            while self._is_piece(next_landing_location):
+                next_landing_location = next_landing_location.get_neighbor(
+                    game_board, direction)
+
+            if self is not next_landing_location:
+                viable_landing_locations.add(next_landing_location)
+
+        return viable_landing_locations
 
     def get_moves_ANT(self, game_board):
         visited = set()
