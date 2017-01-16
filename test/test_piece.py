@@ -84,6 +84,23 @@ class PieceTestCase(unittest.TestCase):
         self.assertNotIn(pocket,
                          self.white_ant_1.get_moves(self.game_board))
 
+    def test_place_piece(self):
+        new_piece = piece.Piece(
+            piece.Piece.PieceType.ANT,
+            piece.Piece.Color.BLACK,
+            2)
+
+        calculated_moves = new_piece.get_moves(self.game_board)
+        expected_move_coords = (
+            (-1, -1),
+            (-1, 3),
+            (-2, 3),
+            (-2, -2),
+            (-3, 2)
+        )
+
+        self.assert_move_coords(calculated_moves, expected_move_coords)
+
     def test_bee(self):
         calculated_moves = self.black_bee_0.get_moves(self.game_board)
         expected_move_coords = (

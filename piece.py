@@ -53,6 +53,9 @@ class Piece(hexcell.HexCell):
                      self.piece_number))
 
     def get_moves(self, game_board):
+        if math.nan in (self.q, self.r, self.s):
+            return self._get_placements(game_board)
+
         if not self.can_move(game_board):
             return []
 
@@ -64,6 +67,9 @@ class Piece(hexcell.HexCell):
             self.PieceType.ANT: self.get_moves_ANT
         }
         return piece_moves[self.piece_type](game_board)
+
+    def _get_placements(self, game_board):
+        raise NotImplementedError
 
     def can_move(self, game_board):
         partitions = [[x] for x in self._get_piece_neighbors(self, game_board)]
