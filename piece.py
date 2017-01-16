@@ -142,7 +142,7 @@ class Piece(hexcell.HexCell):
             visited.add(next_unvisited)
             free_neighbors = self._get_freedom_to_move_neighbors(
                 next_unvisited, game_board)
-            for neighbor in [x for x in free_neighbors if x not in visited]:
+            for neighbor in (x for x in free_neighbors if x not in visited):
                 unvisited.append(neighbor)
 
         visited.remove(self)
@@ -158,9 +158,9 @@ class Piece(hexcell.HexCell):
 
     def _get_freedom_to_move_neighbors(self, hex_cell, game_board):
         space_neighbors = self._get_space_neighbors(hex_cell, game_board)
-        movable_neighbors = [
+        movable_neighbors = (
             neighbor for neighbor in space_neighbors
-            if self._freedom_to_move(hex_cell, neighbor, game_board)]
+            if self._freedom_to_move(hex_cell, neighbor, game_board))
         return movable_neighbors
 
     def _freedom_to_move(self, start, end, game_board):
