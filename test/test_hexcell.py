@@ -110,7 +110,3 @@ class HexCellTestCase(unittest.TestCase):
                           for q, r in neighbor_coordinates]
 
         self.assertEqual(center.get_neighbors(hex_grid), neighbor_hexes)
-
-
-if __name__ == "__main__":
-    unittest.main()
