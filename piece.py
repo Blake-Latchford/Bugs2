@@ -52,6 +52,15 @@ class Piece(hexcell.HexCell):
                      self.color,
                      self.piece_number))
 
+    def __str__(self):
+        str_members = [
+            self.color.name,
+            self.piece_type.name,
+            self.piece_number,
+            super().__str__()]
+
+        return " ".join([str(x) for x in str_members])
+
     def get_moves(self, game_board):
         if math.nan in (self.q, self.r, self.s):
             return self._get_placements(game_board)
