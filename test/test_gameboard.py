@@ -20,44 +20,44 @@ class GameBoardTestCase(unittest.TestCase):
         #             ba1
 
         self.white_spider_0 = piece.Piece(
-            piece.Piece.PieceType.SPIDER,
-            piece.Piece.Color.WHITE,
+            piece.PieceType.SPIDER,
+            piece.Color.WHITE,
             0,
             0, 0)
         self.white_bee_0 = piece.Piece(
-            piece.Piece.PieceType.BEE,
-            piece.Piece.Color.WHITE,
+            piece.PieceType.BEE,
+            piece.Color.WHITE,
             0,
             1, -1)
         self.white_ant_0 = piece.Piece(
-            piece.Piece.PieceType.ANT,
-            piece.Piece.Color.WHITE,
+            piece.PieceType.ANT,
+            piece.Color.WHITE,
             0,
             0, 1)
         self.white_ant_1 = piece.Piece(
-            piece.Piece.PieceType.ANT,
-            piece.Piece.Color.WHITE,
+            piece.PieceType.ANT,
+            piece.Color.WHITE,
             1,
             -3, 0)
 
         self.black_beetle_0 = piece.Piece(
-            piece.Piece.PieceType.BEETLE,
-            piece.Piece.Color.BLACK,
+            piece.PieceType.BEETLE,
+            piece.Color.BLACK,
             0,
             -1, 0)
         self.black_bee_0 = piece.Piece(
-            piece.Piece.PieceType.BEE,
-            piece.Piece.Color.BLACK,
+            piece.PieceType.BEE,
+            piece.Color.BLACK,
             0,
             -2, 1)
         self.black_ant_0 = piece.Piece(
-            piece.Piece.PieceType.ANT,
-            piece.Piece.Color.BLACK,
+            piece.PieceType.ANT,
+            piece.Color.BLACK,
             0,
             -2, 0)
         self.black_ant_1 = piece.Piece(
-            piece.Piece.PieceType.ANT,
-            piece.Piece.Color.BLACK,
+            piece.PieceType.ANT,
+            piece.Color.BLACK,
             1,
             -1, 2)
 
@@ -75,6 +75,24 @@ class GameBoardTestCase(unittest.TestCase):
             self.game_board.register_cell(starting_piece)
 
     def test_get_placed_pieces(self):
+        placed_pieces = self.game_board.get_placed_pieces()
         for piece in self.starting_pieces:
             with self.subTest(str(piece)):
-                self.assertIn(piece, self.game_board.get_placed_pieces())
+                self.assertIn(piece, placed_pieces)
+
+    def test_get_colored_pieces(self):
+        white_pieces = set(
+            self.game_board.get_placed_pieces(piece.Color.WHITE))
+        black_pieces = set(
+            self.game_board.get_placed_pieces(piece.Color.BLACK))
+
+        for starting_piece in self.starting_pieces:
+            with self.subTest(str(starting_piece)):
+                same_color_pieces = white_pieces
+                other_color_pieces = black_pieces
+                if starting_piece.color == piece.Color.BLACK:
+                    same_color_pieces = black_pieces
+                    other_color_pieces = white_pieces
+
+                self.assertIn(starting_piece, same_color_pieces)
+                self.assertNotIn(starting_piece, other_color_pieces)

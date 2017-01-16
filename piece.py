@@ -5,23 +5,25 @@ import hexcell
 import math
 
 
+@unique
+class PieceType(Enum):
+    BEE = 0
+    SPIDER = 1
+    BEETLE = 2
+    GRASSHOPPER = 3
+    ANT = 4
+    # MOSQUITO = 5
+    # LADYBUG = 6
+    # PILLBUG = 7
+
+
+@unique
+class Color(Enum):
+    WHITE = 0
+    BLACK = 1
+
+
 class Piece(hexcell.HexCell):
-
-    @unique
-    class PieceType(Enum):
-        BEE = 0
-        SPIDER = 1
-        BEETLE = 2
-        GRASSHOPPER = 3
-        ANT = 4
-        # MOSQUITO = 5
-        # LADYBUG = 6
-        # PILLBUG = 7
-
-    @unique
-    class Color(Enum):
-        WHITE = 0
-        BLACK = 1
 
     def __init__(self, piece_type, color, piece_number,
                  q=math.nan,
@@ -69,11 +71,11 @@ class Piece(hexcell.HexCell):
             return []
 
         piece_moves = {
-            self.PieceType.BEE: self.get_moves_BEE,
-            self.PieceType.SPIDER: self.get_moves_SPIDER,
-            self.PieceType.BEETLE: self.get_moves_BEETLE,
-            self.PieceType.GRASSHOPPER: self.get_moves_GRASSHOPPER,
-            self.PieceType.ANT: self.get_moves_ANT
+            PieceType.BEE: self.get_moves_BEE,
+            PieceType.SPIDER: self.get_moves_SPIDER,
+            PieceType.BEETLE: self.get_moves_BEETLE,
+            PieceType.GRASSHOPPER: self.get_moves_GRASSHOPPER,
+            PieceType.ANT: self.get_moves_ANT
         }
         return piece_moves[self.piece_type](game_board)
 

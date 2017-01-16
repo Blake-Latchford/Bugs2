@@ -21,44 +21,44 @@ class PieceTestCase(unittest.TestCase):
         #             ba1
 
         self.white_spider_0 = piece.Piece(
-            piece.Piece.PieceType.SPIDER,
-            piece.Piece.Color.WHITE,
+            piece.PieceType.SPIDER,
+            piece.Color.WHITE,
             0,
             0, 0)
         self.white_bee_0 = piece.Piece(
-            piece.Piece.PieceType.BEE,
-            piece.Piece.Color.WHITE,
+            piece.PieceType.BEE,
+            piece.Color.WHITE,
             0,
             1, -1)
         self.white_ant_0 = piece.Piece(
-            piece.Piece.PieceType.ANT,
-            piece.Piece.Color.WHITE,
+            piece.PieceType.ANT,
+            piece.Color.WHITE,
             0,
             0, 1)
         self.white_ant_1 = piece.Piece(
-            piece.Piece.PieceType.ANT,
-            piece.Piece.Color.WHITE,
+            piece.PieceType.ANT,
+            piece.Color.WHITE,
             1,
             -3, 0)
 
         self.black_beetle_0 = piece.Piece(
-            piece.Piece.PieceType.BEETLE,
-            piece.Piece.Color.BLACK,
+            piece.PieceType.BEETLE,
+            piece.Color.BLACK,
             0,
             -1, 0)
         self.black_bee_0 = piece.Piece(
-            piece.Piece.PieceType.BEE,
-            piece.Piece.Color.BLACK,
+            piece.PieceType.BEE,
+            piece.Color.BLACK,
             0,
             -2, 1)
         self.black_ant_0 = piece.Piece(
-            piece.Piece.PieceType.ANT,
-            piece.Piece.Color.BLACK,
+            piece.PieceType.ANT,
+            piece.Color.BLACK,
             0,
             -2, 0)
         self.black_ant_1 = piece.Piece(
-            piece.Piece.PieceType.ANT,
-            piece.Piece.Color.BLACK,
+            piece.PieceType.ANT,
+            piece.Color.BLACK,
             1,
             -1, 2)
 
@@ -86,8 +86,8 @@ class PieceTestCase(unittest.TestCase):
 
     def test_place_piece(self):
         new_piece = piece.Piece(
-            piece.Piece.PieceType.ANT,
-            piece.Piece.Color.BLACK,
+            piece.PieceType.ANT,
+            piece.Color.BLACK,
             2)
 
         calculated_moves = new_piece.get_moves(self.game_board)
@@ -111,8 +111,8 @@ class PieceTestCase(unittest.TestCase):
 
     def test_spider(self):
         white_spider_1 = piece.Piece(
-            piece.Piece.PieceType.SPIDER,
-            piece.Piece.Color.WHITE,
+            piece.PieceType.SPIDER,
+            piece.Color.WHITE,
             1,
             2, -1)
 
@@ -125,8 +125,8 @@ class PieceTestCase(unittest.TestCase):
 
     def test_beetle(self):
         black_beetle_1 = piece.Piece(
-            piece.Piece.PieceType.BEETLE,
-            piece.Piece.Color.BLACK,
+            piece.PieceType.BEETLE,
+            piece.Color.BLACK,
             1,
             -1, -1)
 
@@ -141,8 +141,8 @@ class PieceTestCase(unittest.TestCase):
 
     def test_grasshopper(self):
         white_grasshopper_0 = piece.Piece(
-            piece.Piece.PieceType.GRASSHOPPER,
-            piece.Piece.Color.WHITE,
+            piece.PieceType.GRASSHOPPER,
+            piece.Color.WHITE,
             0,
             -1, -1)
         calculated_moves = white_grasshopper_0.get_moves(self.game_board)
