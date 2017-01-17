@@ -29,6 +29,11 @@ class HexGrid:
 
         self._registered_cells[(hex_cell.q, hex_cell.r)] = hex_cell
 
+    def unregister_cell(self, hex_cell):
+        assert self._registered_cells[(hex_cell.q, hex_cell.r)] is hex_cell
+
+        self._registered_cells.pop((hex_cell.q, hex_cell.r), None)
+
     def reset(self):
         self._registered_cells = {}
 

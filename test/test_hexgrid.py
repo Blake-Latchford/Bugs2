@@ -23,6 +23,14 @@ class HexGridTestCase(unittest.TestCase):
         self.assertEqual(first_unregistered_cell, second_unregistered_cell)
         self.assertIsNot(first_unregistered_cell, second_unregistered_cell)
 
+    def test_unregister_cell(self):
+        hex_cell = self.hex_grid.get_cell(0, 1)
+        self.hex_grid.register_cell(hex_cell)
+        self.hex_grid.unregister_cell(hex_cell)
+        self.assertIsNot(
+            self.hex_grid.get_cell(hex_cell.q, hex_cell.r),
+            hex_cell)
+
     def test_reset(self):
         hex_cell = self.hex_grid.get_cell(0, 1)
         self.hex_grid.register_cell(hex_cell)
