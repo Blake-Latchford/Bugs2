@@ -30,6 +30,10 @@ class GameBoard(hexgrid.HexGrid):
     def place(self, piece):
         local_instance = self._get_piece(piece)
 
+        if local_instance is piece:
+            raise ValueError(
+                "Unable to place piece already on gameboard:" + str(piece))
+
         if not local_instance:
             raise ValueError("Piece not available for placement:" + str(piece))
 
@@ -42,6 +46,7 @@ class GameBoard(hexgrid.HexGrid):
 
         if local_instance in self._placed_pieces:
             self._placed_pieces.remove(local_instance)
+            self.unregister_cell(local_instance)
 
         self.register_cell(piece)
         self._placed_pieces.add(piece)
