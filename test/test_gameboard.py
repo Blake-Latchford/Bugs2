@@ -5,7 +5,7 @@ import unittest
 import piece
 
 
-class GameBoardTestCase(unittest.TestCase):
+class FullGameBoardTestCase(unittest.TestCase):
 
     def setUp(self):
         self.game_board = gameboard.GameBoard()
@@ -72,7 +72,7 @@ class GameBoardTestCase(unittest.TestCase):
             self.black_ant_1)
 
         for starting_piece in self.starting_pieces:
-            self.game_board.register_cell(starting_piece)
+            self.game_board.place(starting_piece)
 
     def test_get_placed_pieces(self):
         placed_pieces = self.game_board.get_placed_pieces()
@@ -80,19 +80,8 @@ class GameBoardTestCase(unittest.TestCase):
             with self.subTest(str(piece)):
                 self.assertIn(piece, placed_pieces)
 
-    def test_get_colored_pieces(self):
-        white_pieces = set(
-            self.game_board.get_placed_pieces(piece.Color.WHITE))
-        black_pieces = set(
-            self.game_board.get_placed_pieces(piece.Color.BLACK))
-
-        for starting_piece in self.starting_pieces:
-            with self.subTest(str(starting_piece)):
-                same_color_pieces = white_pieces
-                other_color_pieces = black_pieces
-                if starting_piece.color == piece.Color.BLACK:
-                    same_color_pieces = black_pieces
-                    other_color_pieces = white_pieces
-
-                self.assertIn(starting_piece, same_color_pieces)
-                self.assertNotIn(starting_piece, other_color_pieces)
+    def test_get_unplaced_pieces(self):
+        unplaced_pieces = self.game_board.get_unplaced_pieces()
+        for piece in self.starting_pieces:
+            with self.subTest(str(piece)):
+                self.assertNotIn(piece, unplaced_pieces)

@@ -73,7 +73,7 @@ class PieceTestCase(unittest.TestCase):
             self.black_ant_1)
 
         for starting_piece in self.starting_pieces:
-            self.game_board.register_cell(starting_piece)
+            self.game_board.place(starting_piece)
 
     def test_one_hive_rule(self):
         self.assertFalse(
@@ -198,5 +198,7 @@ class PieceTestCase(unittest.TestCase):
             if not matched_expected_move:
                 extra_moves.append(calculated_move)
 
-        self.assertFalse(missing_moves, "Missed moves.")
-        self.assertFalse(extra_moves, "Extra moves.")
+        with self.subTest("Missing moves"):
+            self.assertFalse(missing_moves)
+        with self.subTest("Extra moves"):
+            self.assertFalse(extra_moves)

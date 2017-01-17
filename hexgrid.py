@@ -12,25 +12,25 @@ class HexGrid:
     """
 
     def __init__(self):
-        self._populated_cells = {}
+        self._registered_cells = {}
 
     def get_cell(self, q, r):
         """Get the cell at the specified coordinates. If no cell is registered
         at that location, create a temporary new cell."""
 
         coords = (q, r)
-        if coords in self._populated_cells:
-            return self._populated_cells[coords]
+        if coords in self._registered_cells:
+            return self._registered_cells[coords]
         return HexCell(q, r)
 
     def register_cell(self, hex_cell):
         """Register a hex cell to be retained in the grid."""
-        assert (hex_cell.q, hex_cell.r) not in self._populated_cells
+        assert (hex_cell.q, hex_cell.r) not in self._registered_cells
 
-        self._populated_cells[(hex_cell.q, hex_cell.r)] = hex_cell
+        self._registered_cells[(hex_cell.q, hex_cell.r)] = hex_cell
 
     def reset(self):
-        self._populated_cells = {}
+        self._registered_cells = {}
 
     def breadth_first_search(self, start, max_distance, filter_function=None):
         """Do a breadth first search from start and going max_distance
