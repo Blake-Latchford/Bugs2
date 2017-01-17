@@ -74,6 +74,19 @@ class FullGameBoardTestCase(unittest.TestCase):
         for starting_piece in self.starting_pieces:
             self.game_board.place(starting_piece)
 
+    def test_get_pieces(self):
+        for color in (None, piece.Color.BLACK, piece.Color.WHITE):
+            pieces = set(self.game_board.get_pieces(color))
+            placed_pieces = set(self.game_board.get_placed_pieces(color))
+            unplaced_pieces = set(self.game_board.get_unplaced_pieces(color))
+
+            # "Greater" here is for the set operator overloading for
+            # proper superset.
+            with self.subTest(msg="Placed Pieces", color=color):
+                self.assertGreater(pieces, placed_pieces)
+            with self.subTest(msg="Unplaced Pieces", color=color):
+                self.assertGreater(pieces, unplaced_pieces)
+
     def test_get_placed_pieces(self):
         placed_pieces = self.game_board.get_placed_pieces()
         for piece in self.starting_pieces:

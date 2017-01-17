@@ -62,6 +62,11 @@ class GameBoard(hexgrid.HexGrid):
 
         return None
 
+    def get_pieces(self, color=None):
+        pieces = set(self.get_placed_pieces(color))
+        pieces.update(self.get_unplaced_pieces(color))
+        return pieces
+
     def get_placed_pieces(self, color=None):
         if color is None:
             return self._placed_pieces
