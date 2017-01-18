@@ -98,3 +98,38 @@ class FullGameBoardTestCase(unittest.TestCase):
         for piece in self.starting_pieces:
             with self.subTest(str(piece)):
                 self.assertNotIn(piece, unplaced_pieces)
+
+    def test_piece_stacking(self):
+        beetle_on_top_of_hive = piece.Piece(
+            piece.PieceType.BEETLE,
+            piece.Color.WHITE,
+            0,
+            -1, 0)
+
+        self.game_board.place(beetle_on_top_of_hive)
+        self.assertIs(self.game_board.get_cell(
+            beetle_on_top_of_hive.q, beetle_on_top_of_hive.r))
+
+        # The bottom piece is still registered on the board.
+        self.assertIn(self.black_beetle_0,
+                      self.game_board.get_placed_pieces())
+
+    def test_piece_unstacking(self):
+        beetle_on_top_of_hive = piece.Piece(
+            piece.PieceType.BEETLE,
+            piece.Color.WHITE,
+            0,
+            -1, 0)
+        beetle_off_of_hive = piece.Piece(
+            piece.PieceType.BEETLE,
+            piece.Color.WHITE,
+            0,
+            -1, -1)
+
+        self.game_board.place(beetle_on_top_of_hive)
+        self.game_board.place(beetle_off_of_hive)
+
+        self.assertIs(beetle_off_of_hive, self.game_board.get_cell(
+            beetle_off_of_hive.q, beetle_off_of_hive.r))
+        self.assertIs(beetle_off_of_hive, self.game_board.get_cell(
+            beetle_off_of_hive.q, beetle_off_of_hive.r))
