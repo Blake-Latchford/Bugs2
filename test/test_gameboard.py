@@ -107,8 +107,9 @@ class FullGameBoardTestCase(unittest.TestCase):
             -1, 0)
 
         self.game_board.place(beetle_on_top_of_hive)
-        self.assertIs(self.game_board.get_cell(
-            beetle_on_top_of_hive.q, beetle_on_top_of_hive.r))
+        self.assertIs(beetle_on_top_of_hive,
+                      self.game_board.get_cell(
+                          beetle_on_top_of_hive.q, beetle_on_top_of_hive.r))
 
         # The bottom piece is still registered on the board.
         self.assertIn(self.black_beetle_0,

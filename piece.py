@@ -32,6 +32,7 @@ class Piece(hexcell.HexCell):
         self.piece_type = piece_type
         self.color = color
         self.piece_number = piece_number
+        self.above = None
 
     def __eq__(self, other):
         if not super().__eq__(other):
@@ -158,7 +159,7 @@ class Piece(hexcell.HexCell):
         viable_landing_locations = set()
         for direction in hexcell.Direction:
             next_landing_location = self
-            while self._is_piece(next_landing_location):
+            while self.is_piece(next_landing_location):
                 next_landing_location = next_landing_location.get_neighbor(
                     game_board, direction)
 
@@ -184,7 +185,7 @@ class Piece(hexcell.HexCell):
 
     def _get_piece_neighbors(self, hex_cell, game_board):
         return {x for x in hex_cell.get_neighbors(game_board)
-                if Piece._is_piece(x)}
+                if Piece.is_piece(x)}
 
     def _get_space_neighbors(self, hex_cell, game_board):
         return {x for x in hex_cell.get_neighbors(game_board)
@@ -213,18 +214,18 @@ class Piece(hexcell.HexCell):
             counterclockwise_neighbor_hex.r)
 
         clockwise_blocked = (
-            self._is_piece(clockwise_neighbor) and
+            self.is_piece(clockwise_neighbor) and
             clockwise_neighbor is not self)
         counterclockwise_blocked = (
-            self._is_piece(counterclockwise_neighbor) and
+            self.is_piece(counterclockwise_neighbor) and
             counterclockwise_neighbor is not self)
 
         return (clockwise_blocked != counterclockwise_blocked)
 
     @classmethod
-    def _is_piece(cls, hex_cell):
+    def is_piece(cls, hex_cell):
         return hasattr(hex_cell, "get_moves")
 
     @classmethod
     def _is_space(cls, hex_cell):
-        return not cls._is_piece(hex_cell)
+        return not cls.is_piece(hex_cell)

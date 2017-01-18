@@ -27,20 +27,23 @@ class GameBoard(hexgrid.HexGrid):
                     self._unplaced_pieces.add(
                         piece.Piece(piece_type, color, piece_number))
 
-    def place(self, piece):
-        local_instance = self._get_piece(piece)
+    def place(self, new_piece):
+        local_instance = self._get_piece(new_piece)
 
-        if local_instance is piece:
+        # Make sure this new_piece is valid to place.
+        if local_instance is new_piece:
             raise ValueError(
-                "Unable to place piece already on gameboard:" + str(piece))
+                "Unable to place new_piece already on gameboard:" + str(new_piece))
 
         if not local_instance:
-            raise ValueError("Piece not available for placement:" + str(piece))
+            raise ValueError(
+                "Piece not available for placement:" + str(new_piece))
 
-        if math.isnan(piece.q) or math.isnan(piece.r):
+        if math.isnan(new_piece.q) or math.isnan(new_piece.r):
             raise ValueError("Piece does not have coordinates specified:" +
-                             str(piece))
+                             str(new_piece))
 
+        # Clean up the old location
         if local_instance in self._unplaced_pieces:
             self._unplaced_pieces.remove(local_instance)
 
@@ -48,8 +51,16 @@ class GameBoard(hexgrid.HexGrid):
             self._placed_pieces.remove(local_instance)
             self.unregister_cell(local_instance)
 
-        self.register_cell(piece)
-        self._placed_pieces.add(piece)
+            if local_instance.above:
+                self.register_cell(local_instance.above)
+
+        bottom_piece = self.get_cell(new_piece.q, new_piece.r)
+        if piece.Piece.is_piece(bottom_piece):
+            self.unregister_cell(bottom_piece)
+            new_piece.above = bottom_piece
+
+        self.register_cell(new_piece)
+        self._placed_pieces.add(new_piece)
 
     def _get_piece(self, piece):
         """Get a piece based on its color, type and number."""
