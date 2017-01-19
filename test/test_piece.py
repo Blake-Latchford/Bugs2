@@ -73,7 +73,7 @@ class PieceTestCase(unittest.TestCase):
             self.black_ant_1)
 
         for starting_piece in self.starting_pieces:
-            self.game_board.place(starting_piece)
+            self.game_board.force_place(starting_piece)
 
     def test_one_hive_rule(self):
         self.assertFalse(

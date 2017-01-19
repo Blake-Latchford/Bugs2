@@ -72,7 +72,7 @@ class FullGameBoardTestCase(unittest.TestCase):
             self.black_ant_1)
 
         for starting_piece in self.starting_pieces:
-            self.game_board.place(starting_piece)
+            self.game_board.force_place(starting_piece)
 
     def test_get_pieces(self):
         for color in (None, piece.Color.BLACK, piece.Color.WHITE):
@@ -106,7 +106,7 @@ class FullGameBoardTestCase(unittest.TestCase):
             0,
             -1, 0)
 
-        self.game_board.place(beetle_on_top_of_hive)
+        self.game_board.force_place(beetle_on_top_of_hive)
         self.assertIs(beetle_on_top_of_hive,
                       self.game_board.get_cell(
                           beetle_on_top_of_hive.q, beetle_on_top_of_hive.r))
@@ -127,8 +127,8 @@ class FullGameBoardTestCase(unittest.TestCase):
             0,
             -1, -1)
 
-        self.game_board.place(beetle_on_top_of_hive)
-        self.game_board.place(beetle_off_of_hive)
+        self.game_board.force_place(beetle_on_top_of_hive)
+        self.game_board.force_place(beetle_off_of_hive)
 
         self.assertIs(beetle_off_of_hive, self.game_board.get_cell(
             beetle_off_of_hive.q, beetle_off_of_hive.r))

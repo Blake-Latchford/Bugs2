@@ -30,6 +30,19 @@ class GameBoard(hexgrid.HexGrid):
     def place(self, new_piece):
         local_instance = self._get_piece(new_piece)
 
+        available_moves = local_instance.get_moves(self)
+        if self.get_cell(new_piece.q, new_piece.r) not in available_moves:
+            raise ValueError("Piece does not represent a valid move:" +
+                             str(local_instance) + " to " + str(new_piece))
+
+        self.force_place(new_piece)
+
+    def force_place(self, new_piece):
+        """Like place, but doesn't verify game mechanics.
+        Storage consistency assumptions are validated however."""
+
+        local_instance = self._get_piece(new_piece)
+
         # Make sure this new_piece is valid to place.
         if local_instance is new_piece:
             raise ValueError(
