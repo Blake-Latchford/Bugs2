@@ -203,11 +203,10 @@ class PieceTestCase(unittest.TestCase):
         with self.subTest("Extra moves"):
             self.assertFalse(extra_moves)
 
-        def test_place_in_empty_gameboard(self):
-            empty_gameboard = gameboard.GameBoard()
-            new_piece = piece.Piece(
-                piece.PieceType.SPIDER,
-                piece.Color.WHITE,
-                0,
-                0, 0)
-            self.assertTrue(new_piece.get_moves(empty_gameboard))
+    def test_place_in_empty_gameboard(self):
+        empty_gameboard = gameboard.GameBoard()
+        new_piece = piece.Piece(
+            piece.PieceType.SPIDER,
+            piece.Color.WHITE,
+            0)
+        self.assertTrue(new_piece.get_moves(empty_gameboard))

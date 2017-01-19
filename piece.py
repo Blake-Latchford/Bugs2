@@ -84,6 +84,9 @@ class Piece(hexcell.HexCell):
         open_neighbors = set()
         non_enemy_adjacent_open_neighbors = set()
 
+        if not game_board.get_placed_pieces():
+            return {game_board.get_cell(0, 0)}
+
         for piece in game_board.get_placed_pieces(self.color):
             for open_neighbor in piece._get_space_neighbors(piece, game_board):
                 open_neighbors.add(open_neighbor)
@@ -102,6 +105,10 @@ class Piece(hexcell.HexCell):
 
     def can_move(self, game_board):
         partitions = [[x] for x in self._get_piece_neighbors(self, game_board)]
+
+        if not partitions:  # Only one piece on the board.
+            return False
+
         first_partition = partitions[0]
         first_partition.insert(0, self)
         search_index = 1
