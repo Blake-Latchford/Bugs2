@@ -105,3 +105,11 @@ class GameBoard(hexgrid.HexGrid):
         if color is None:
             return self._unplaced_pieces
         return (x for x in self._unplaced_pieces if x.color == color)
+
+    def get_moves(self):
+        moves = dict()
+
+        for piece in self._placed_pieces | self._unplaced_pieces:
+            moves[piece] = piece.get_moves(self)
+
+        return moves

@@ -163,5 +163,5 @@ class FullGameBoardTestCase(unittest.TestCase):
         for starting_piece in self.starting_pieces:
             with self.subTest(starting_piece):
                 self.assertEqual(
-                    starting_piece.get_moves(self.game_board),
-                    available_moves[starting_piece])
+                    list(starting_piece.get_moves(self.game_board)),
+                    list(available_moves[starting_piece]))
