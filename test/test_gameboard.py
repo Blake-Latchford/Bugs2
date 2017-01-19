@@ -134,3 +134,34 @@ class FullGameBoardTestCase(unittest.TestCase):
             beetle_off_of_hive.q, beetle_off_of_hive.r))
         self.assertIs(beetle_off_of_hive, self.game_board.get_cell(
             beetle_off_of_hive.q, beetle_off_of_hive.r))
+
+    def test_place_floating(self):
+        floating_piece = piece.Piece(
+            piece.PieceType.BEETLE,
+            piece.Color.WHITE,
+            0,
+            0, -2)
+
+        with self.assertRaises(ValueError):
+            self.game_board.place(floating_piece)
+
+    def test_invalid_move(self):
+        """No valid move exists from the starting configuration to perform
+        this move."""
+        invalid_placement = piece.Piece(
+            piece.PieceType.BEE,
+            piece.Color.WHITE,
+            0,
+            1, 1)
+
+        with self.assertRaises(ValueError):
+            self.game_board.place(invalid_placement)
+
+    def test_get_moves(self):
+        available_moves = self.game_board.get_moves()
+
+        for starting_piece in self.starting_pieces:
+            with self.subTest(starting_piece):
+                self.assertEqual(
+                    starting_piece.get_moves(self.game_board),
+                    available_moves[starting_piece])
