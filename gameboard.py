@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import hexgrid
 import piece
 import math
