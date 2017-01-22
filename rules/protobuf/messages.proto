@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+message Piece {
+
+    enum PieceType {
+        BEE = 0;
+        SPIDER = 1;
+        BEETLE = 2;
+        GRASSHOPPER = 3;
+        ANT = 4;
+    }
+    
+    enum Color {
+        WHITE = 0;
+        BLACK = 1;
+    }
+    
+    PieceType piece_type = 1;
+    Color color = 2;
+    int32 piece_number = 3;
+    
+    oneof nullable_q { int32 q = 4; }
+    oneof nullable_r { int32 r = 5; }
+}
+
+message GameBoard {
+    repeated Piece pieces = 1;
+}
