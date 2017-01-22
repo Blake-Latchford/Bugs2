@@ -1,6 +1,7 @@
 from enum import Enum, unique
 import hexcell
 import math
+import protobuf.messages_pb2 as messages
 
 
 @unique
@@ -234,3 +235,36 @@ class Piece(hexcell.HexCell):
     @classmethod
     def _is_space(cls, hex_cell):
         return not cls.is_piece(hex_cell)
+
+    def to_protobuf(self):
+        message = messages.Piece()
+
+        message.color = messages.Piece.Color.Value(  # @UndefinedVariable
+            self.color.name)
+        message.piece_type = messages.Piece.PieceType.Value(  # @UndefinedVariable
+            self.piece_type.name)
+        message.piece_number = self.piece_number
+
+        if not math.isnan(self.q) and not math.isnan(self.r):
+            message.q = self.q
+            message.r = self.r
+
+        return message
+
+    @staticmethod
+    def from_protobuf(message):
+        color = Color[
+            messages.Piece.Color.Name(  # @UndefinedVariable
+                message.color)]
+        piece_type = PieceType[
+            messages.Piece.PieceType.Name(  # @UndefinedVariable
+                message.piece_type)]
+        piece_number = message.piece_number
+        q = math.nan
+        r = math.nan
+
+        if message.HasField("q") and message.HasField("r"):
+            q = message.q
+            r = message.r
+
+        return Piece(piece_type, color, piece_number, q, r)

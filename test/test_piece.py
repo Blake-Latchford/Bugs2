@@ -2,6 +2,7 @@ import unittest
 import gameboard
 import hexcell
 import piece
+import math
 
 
 class PieceTestCase(unittest.TestCase):
@@ -208,3 +209,19 @@ class PieceTestCase(unittest.TestCase):
             piece.Color.WHITE,
             0)
         self.assertTrue(new_piece.get_moves(empty_gameboard))
+
+
+class PieceProtobufTestCase(unittest.TestCase):
+
+    def test_conversion(self):
+        for piece_type in piece.PieceType:
+            for color in piece.Color:
+                for piece_num in range(4):
+                    for q, r in ((0, 0), (-4, 63), (math.nan, math.nan)):
+                        starting_piece = piece.Piece(
+                            piece_type, color, piece_num, q, r)
+                        with self.subTest(starting_piece):
+                            protobuf = starting_piece.to_protobuf()
+                            end_piece = piece.Piece.from_protobuf(protobuf)
+                            self.assertEqual(starting_piece, end_piece)
+                            self.assertIsNot(starting_piece, end_piece)

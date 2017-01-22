@@ -1,4 +1,5 @@
 from enum import Enum, unique
+import math
 
 
 @unique
@@ -41,9 +42,19 @@ class HexCell:
 
     def has_same_coordinates(self, other):
         """Same as __eq__, but accessible for derived classes."""
-        return (self.q == other.q and
-                self.r == other.r and
-                self.s == other.s)
+
+        if not self._are_equal_or_nan(self.q, other.q):
+            return False
+        if not self._are_equal_or_nan(self.r, other.r):
+            return False
+        if not self._are_equal_or_nan(self.s, other.s):
+            return False
+        return True
+
+    def _are_equal_or_nan(self, first, second):
+        if math.isnan(first) and math.isnan(second):
+            return True
+        return first == second
 
     def __hash__(self):
         return hash((self.q, self.r, self.s))

@@ -1,6 +1,7 @@
 import unittest
 import hexcell
 import hexgrid
+import math
 
 
 class HexCellTestCase(unittest.TestCase):
@@ -20,6 +21,12 @@ class HexCellTestCase(unittest.TestCase):
 
         self.assertFalse(first != second)
         self.assertTrue(first != third)
+
+    def test_nan_equal(self):
+        first = hexcell.HexCell(math.nan, math.nan)
+        second = hexcell.HexCell(math.nan, math.nan)
+
+        self.assertEqual(first, second)
 
     def test_difference_zero(self):
         first = hexcell.HexCell(0, 0)
