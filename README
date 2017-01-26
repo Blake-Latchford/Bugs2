@@ -1,7 +1,0 @@
-requires:
-    pip install
-        protobuf
-
-The protobuf compiler is installed in the project in the protoc directory.
-This was not committed because I didn't want to figure out license
-compatability.

@@ -211,7 +211,7 @@ class PieceTestCase(unittest.TestCase):
         self.assertTrue(new_piece.get_moves(empty_gameboard))
 
 
-class PieceProtobufTestCase(unittest.TestCase):
+class PieceJSONTestCase(unittest.TestCase):
 
     def test_conversion(self):
         for piece_type in piece.PieceType:
@@ -221,7 +221,7 @@ class PieceProtobufTestCase(unittest.TestCase):
                         starting_piece = piece.Piece(
                             piece_type, color, piece_num, q, r)
                         with self.subTest(starting_piece):
-                            protobuf = starting_piece.to_protobuf()
-                            end_piece = piece.Piece.from_protobuf(protobuf)
+                            json_object = starting_piece.to_json_object()
+                            end_piece = piece.Piece(json_object=json_object)
                             self.assertEqual(starting_piece, end_piece)
                             self.assertIsNot(starting_piece, end_piece)

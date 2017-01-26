@@ -1,7 +1,6 @@
 from enum import Enum, unique
 import hexcell
 import math
-import protobuf.messages_pb2 as messages
 
 
 @unique
@@ -24,14 +23,26 @@ class Color(Enum):
 
 class Piece(hexcell.HexCell):
 
-    def __init__(self, piece_type, color, piece_number,
+    def __init__(self, piece_type=None,
+                 color=None,
+                 piece_number=None,
                  q=math.nan,
-                 r=math.nan):
-        super().__init__(q, r)
-        self.piece_type = piece_type
-        self.color = color
-        self.piece_number = piece_number
-        self.above = None
+                 r=math.nan,
+                 json_object=None):
+        """If json_object is specified, assume it is a hash of the other
+        parameters. The enums are stored as strings."""
+
+        if json_object:
+            super().__init__(json_object["q"], json_object["r"])
+            self.piece_type = PieceType[json_object["piece_type"]]
+            self.color = Color[json_object["color"]]
+            self.piece_number = json_object["piece_number"]
+        else:
+            super().__init__(q, r)
+            self.piece_type = piece_type
+            self.color = color
+            self.piece_number = piece_number
+            self.above = None
 
     def __eq__(self, other):
         if not super().__eq__(other):
@@ -236,35 +247,12 @@ class Piece(hexcell.HexCell):
     def _is_space(cls, hex_cell):
         return not cls.is_piece(hex_cell)
 
-    def to_protobuf(self):
-        message = messages.Piece()
+    def to_json_object(self):
+        json_object = dict()
+        json_object["piece_type"] = self.piece_type.name
+        json_object["color"] = self.color.name
+        json_object["piece_number"] = self.piece_number
+        json_object["q"] = self.q
+        json_object["r"] = self.r
 
-        message.color = messages.Piece.Color.Value(  # @UndefinedVariable
-            self.color.name)
-        message.piece_type = messages.Piece.PieceType.Value(  # @UndefinedVariable
-            self.piece_type.name)
-        message.piece_number = self.piece_number
-
-        if not math.isnan(self.q) and not math.isnan(self.r):
-            message.q = self.q
-            message.r = self.r
-
-        return message
-
-    @staticmethod
-    def from_protobuf(message):
-        color = Color[
-            messages.Piece.Color.Name(  # @UndefinedVariable
-                message.color)]
-        piece_type = PieceType[
-            messages.Piece.PieceType.Name(  # @UndefinedVariable
-                message.piece_type)]
-        piece_number = message.piece_number
-        q = math.nan
-        r = math.nan
-
-        if message.HasField("q") and message.HasField("r"):
-            q = message.q
-            r = message.r
-
-        return Piece(piece_type, color, piece_number, q, r)
+        return json_object
