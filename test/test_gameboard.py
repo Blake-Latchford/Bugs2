@@ -3,7 +3,7 @@ import unittest
 import piece
 
 
-class FullGameBoardTestCase(unittest.TestCase):
+class GameBoardTestCase(unittest.TestCase):
 
     def setUp(self):
         self.game_board = gameboard.GameBoard()
@@ -163,3 +163,9 @@ class FullGameBoardTestCase(unittest.TestCase):
                 self.assertEqual(
                     list(starting_piece.get_moves(self.game_board)),
                     list(available_moves[starting_piece]))
+
+    def test_json_conversion(self):
+        json_object = self.game_board.to_json_object()
+        end_game_board = self.game_board(json_object=json_object)
+        self.assertEqual(starting_piece, end_game_board)
+        self.assertIsNot(starting_piece, end_game_board)
