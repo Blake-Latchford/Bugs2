@@ -41,6 +41,13 @@ class GameBoard(hexgrid.HexGrid):
             else:
                 self._unplaced_pieces.add(board_piece)
 
+    def __eq__(self, other):
+        if self._unplaced_pieces != other._unplaced_pieces:
+            return False
+        if self._placed_pieces != other._placed_pieces:
+            return False
+        return True
+
     def place(self, new_piece):
         local_instance = self._get_piece(new_piece)
         assert local_instance

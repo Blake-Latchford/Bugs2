@@ -72,6 +72,18 @@ class GameBoardTestCase(unittest.TestCase):
         for starting_piece in self.starting_pieces:
             self.game_board.force_place(starting_piece)
 
+    def test_equal_empty(self):
+        first = gameboard.GameBoard()
+        second = gameboard.GameBoard()
+        self.assertEqual(first, second)
+
+    def test_equal(self):
+        self.assertEqual(self.game_board, self.game_board)
+
+    def test_not_equal(self):
+        empty_board = gameboard.GameBoard()
+        self.assertNotEqual(empty_board, self.game_board)
+
     def test_get_pieces(self):
         for color in (None, piece.Color.BLACK, piece.Color.WHITE):
             pieces = set(self.game_board.get_pieces(color))
