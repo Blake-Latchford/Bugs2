@@ -166,6 +166,6 @@ class GameBoardTestCase(unittest.TestCase):
 
     def test_json_conversion(self):
         json_object = self.game_board.to_json_object()
-        end_game_board = self.game_board(json_object=json_object)
-        self.assertEqual(starting_piece, end_game_board)
-        self.assertIsNot(starting_piece, end_game_board)
+        end_game_board = gameboard.GameBoard(json_object=json_object)
+        self.assertEqual(self.game_board, end_game_board)
+        self.assertIsNot(self.game_board, end_game_board)
