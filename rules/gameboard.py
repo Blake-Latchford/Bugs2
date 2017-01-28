@@ -13,17 +13,33 @@ class GameBoard(hexgrid.HexGrid):
         piece.PieceType.ANT: 3
     }
 
-    def __init__(self):
+    def __init__(self, json_object=None):
         super().__init__()
 
         self._placed_pieces = set()
         self._unplaced_pieces = set()
 
+        if not json_object:
+            self._init_empty()
+        else:
+            self._init_from_json_object(json_object)
+
+    def _init_empty(self):
         for color in piece.Color:
             for piece_type, piece_count in self._piece_type_counts.items():
                 if piece_count > 0:
                     self._unplaced_pieces.add(
                         piece.Piece(piece_type, color, 0))
+
+    def _init_from_json_object(self, json_object):
+        assert json_object
+
+        for json_piece_object in json_object["pieces"]:
+            board_piece = piece.Piece(json_object=json_piece_object)
+            if board_piece.is_placed():
+                self._placed_pieces.add(board_piece)
+            else:
+                self._unplaced_pieces.add(board_piece)
 
     def place(self, new_piece):
         local_instance = self._get_piece(new_piece)
@@ -41,7 +57,7 @@ class GameBoard(hexgrid.HexGrid):
         Storage consistency assumptions are validated however."""
 
         local_instance = self._get_piece(new_piece)
-        self._validate_piece(new_piece, local_instance)
+        self._validate_placement(new_piece, local_instance)
         self._remove_replaced_piece(local_instance)
         self._register_new_piece(new_piece)
 
@@ -61,7 +77,7 @@ class GameBoard(hexgrid.HexGrid):
 
         return None
 
-    def _validate_piece(self, new_piece, local_instance):
+    def _validate_placement(self, new_piece, local_instance):
         # Make sure this new_piece is valid to place.
         if local_instance is new_piece:
             raise ValueError(
@@ -135,3 +151,7 @@ class GameBoard(hexgrid.HexGrid):
             moves[piece] = piece.get_moves(self)
 
         return moves
+
+    def to_json_object(self):
+        pieces = [x.to_json_object() for x in self.get_pieces()]
+        return {"pieces": pieces}
