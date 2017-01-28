@@ -210,6 +210,21 @@ class PieceTestCase(unittest.TestCase):
             0)
         self.assertTrue(new_piece.get_moves(empty_gameboard))
 
+    def test_is_not_placed(self):
+        new_piece = piece.Piece(
+            piece.PieceType.SPIDER,
+            piece.Color.WHITE,
+            0)
+        self.assertFalse(new_piece.is_placed())
+
+    def test_is_not_placed(self):
+        new_piece = piece.Piece(
+            piece.PieceType.SPIDER,
+            piece.Color.WHITE,
+            0,
+            0, 0)
+        self.assertTrue(new_piece.is_placed())
+
 
 class PieceJSONTestCase(unittest.TestCase):
 

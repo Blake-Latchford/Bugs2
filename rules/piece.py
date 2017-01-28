@@ -239,6 +239,11 @@ class Piece(hexcell.HexCell):
 
         return (clockwise_blocked != counterclockwise_blocked)
 
+    def is_placed(self):
+        if math.isnan(self.q) or math.isnan(self.r) or math.isnan(self.s):
+            return False
+        return True
+
     @classmethod
     def is_piece(cls, hex_cell):
         return hasattr(hex_cell, "get_moves")
