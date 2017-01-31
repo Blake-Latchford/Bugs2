@@ -83,10 +83,6 @@ class HexCell:
     def rotate_counterclockwise_about_origin(self):
         return HexCell(-self.r, -self.s)
 
-    def distance(self, other):
-        diff = self - other
-        return (abs(diff.q) + abs(diff.r) + abs(diff.s)) / 2
-
     def get_neighbors(self, hex_grid):
         """Get the set of cells adjacent to hex_cell"""
         neighbors = []

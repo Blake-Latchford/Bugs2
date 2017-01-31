@@ -75,15 +75,6 @@ class HexCellTestCase(unittest.TestCase):
 
         self.assertEqual(expected_result, calculated_result)
 
-    def test_distance_origin_to_origin(self):
-        origin = hexcell.HexCell(0, 0)
-        self.assertEqual(origin.distance(origin), 0)
-
-    def test_distance_offset_from_origin(self):
-        first = hexcell.HexCell(-1, -1)
-        second = hexcell.HexCell(0, 2)
-        self.assertEqual(first.distance(second), 4)
-
     def test_origin_neighbors(self):
         hex_grid = hexgrid.HexGrid()
         origin = hexcell.HexCell(0, 0)
