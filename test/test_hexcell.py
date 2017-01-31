@@ -89,7 +89,7 @@ class HexCellTestCase(unittest.TestCase):
         neighbor_hexes = [hex_grid.get_cell(q, r)
                           for q, r in neighbor_coordinates]
 
-        self.assertEqual(origin.get_neighbors(hex_grid), neighbor_hexes)
+        self.assertEqual(list(origin.get_neighbors(hex_grid)), neighbor_hexes)
 
     def test_non_origin_neighbors(self):
         hex_grid = hexgrid.HexGrid()
@@ -105,4 +105,4 @@ class HexCellTestCase(unittest.TestCase):
         neighbor_hexes = [hex_grid.get_cell(q, r)
                           for q, r in neighbor_coordinates]
 
-        self.assertEqual(center.get_neighbors(hex_grid), neighbor_hexes)
+        self.assertEqual(list(center.get_neighbors(hex_grid)), neighbor_hexes)

@@ -84,11 +84,10 @@ class HexCell:
         return HexCell(-self.r, -self.s)
 
     def get_neighbors(self, hex_grid):
-        """Get the set of cells adjacent to hex_cell"""
-        neighbors = []
-        for direction in Direction:
-            neighbors.append(self.get_neighbor(hex_grid, direction))
-        return neighbors
+        """Get the cells adjacent to hex_cell in hex_grid in Direction order."""
+
+        return (self.get_neighbor(hex_grid, direction)
+                for direction in Direction)
 
     def get_neighbor(self, hex_grid, direction):
         """Get the HexCell adjacent to hex_cell in the specified direction."""
