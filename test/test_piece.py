@@ -5,7 +5,7 @@ import piece
 import math
 
 
-class PieceTestCase(unittest.TestCase):
+class PieceMovementTestCase(unittest.TestCase):
 
     def setUp(self):
         self.game_board = gameboard.GameBoard()
@@ -202,6 +202,9 @@ class PieceTestCase(unittest.TestCase):
         with self.subTest("Extra moves"):
             self.assertFalse(extra_moves)
 
+
+class PieceIndependentTestCase(unittest.TestCase):
+
     def test_place_in_empty_gameboard(self):
         empty_gameboard = gameboard.GameBoard()
         new_piece = piece.Piece(
@@ -217,7 +220,7 @@ class PieceTestCase(unittest.TestCase):
             0)
         self.assertFalse(new_piece.is_placed())
 
-    def test_is_not_placed(self):
+    def test_is_placed(self):
         new_piece = piece.Piece(
             piece.PieceType.SPIDER,
             piece.Color.WHITE,
@@ -225,10 +228,7 @@ class PieceTestCase(unittest.TestCase):
             0, 0)
         self.assertTrue(new_piece.is_placed())
 
-
-class PieceJSONTestCase(unittest.TestCase):
-
-    def test_conversion(self):
+    def test_json_conversion(self):
         for piece_type in piece.PieceType:
             for color in piece.Color:
                 for piece_num in range(4):
