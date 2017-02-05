@@ -240,3 +240,30 @@ class PieceIndependentTestCase(unittest.TestCase):
                             end_piece = piece.Piece(json_object=json_object)
                             self.assertEqual(starting_piece, end_piece)
                             self.assertIsNot(starting_piece, end_piece)
+
+    def test_get_moved_absolute_on_to_board(self):
+        old_piece = piece.Piece(
+            piece.PieceType.SPIDER,
+            piece.Color.WHITE,
+            0)
+        new_piece = old_piece.get_moved_absolute(0, 0)
+
+        self.assertTrue(math.isnan(old_piece.q))
+        self.assertTrue(math.isnan(old_piece.r))
+
+        self.assertEqual(new_piece.q, 0)
+        self.assertEqual(new_piece.r, 0)
+
+    def test_get_moved_absolute(self):
+        old_piece = piece.Piece(
+            piece.PieceType.SPIDER,
+            piece.Color.WHITE,
+            0,
+            0, 0)
+        new_piece = old_piece.get_moved_absolute(15, -6)
+
+        self.assertEqual(old_piece.q, 0)
+        self.assertEqual(old_piece.r, 0)
+
+        self.assertEqual(new_piece.q, 15)
+        self.assertEqual(new_piece.r, -6)

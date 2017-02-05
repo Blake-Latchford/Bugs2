@@ -45,14 +45,10 @@ class ConsoleClient:
 
                 print("Select Destination:")
                 relative_location_string = await self._get_input()
-                destination = self._parse_relative_location(
+                q, r = self._parse_relative_location(
                     relative_location_string)
 
-                place_piece_json_object = json_object = \
-                    source_piece.to_json_object()
-                place_piece_json_object["q"], place_piece_json_object["r"] = \
-                    destination
-                destination_piece = piece.Piece(place_piece_json_object)
+                destination_piece = source_piece.get_moved_absolute(q, r)
 
                 await self.queue.put(destination_piece)
             except Exception as e:

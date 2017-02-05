@@ -244,6 +244,13 @@ class Piece(hexcell.HexCell):
             return False
         return True
 
+    def get_moved_absolute(self, q, r):
+        return Piece(
+            self.piece_type,
+            self.color,
+            self.piece_number,
+            q, r)
+
     @classmethod
     def is_piece(cls, hex_cell):
         return hasattr(hex_cell, "get_moves")
