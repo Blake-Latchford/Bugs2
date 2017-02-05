@@ -1,5 +1,5 @@
-import hexgrid
-import piece
+from . import hexgrid
+from . import piece
 import math
 
 

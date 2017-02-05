@@ -1,6 +1,6 @@
-import gameboard
 import unittest
-import piece
+import rules.gameboard as gameboard
+import rules.piece as piece
 
 
 class GameBoardTestCase(unittest.TestCase):

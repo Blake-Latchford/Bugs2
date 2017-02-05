@@ -1,6 +1,6 @@
 import unittest
-import hexcell
-import hexgrid
+import rules.hexcell as hexcell
+import rules.hexgrid as hexgrid
 import math
 
 

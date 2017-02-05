@@ -1,4 +1,4 @@
-from hexcell import HexCell
+from . import hexcell
 
 
 class HexGrid:
@@ -18,7 +18,7 @@ class HexGrid:
         coords = (q, r)
         if coords in self._registered_cells:
             return self._registered_cells[coords]
-        return HexCell(q, r)
+        return hexcell.HexCell(q, r)
 
     def register_cell(self, hex_cell):
         """Register a hex cell to be retained in the grid."""

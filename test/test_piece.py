@@ -1,7 +1,7 @@
 import unittest
-import gameboard
-import hexcell
-import piece
+import rules.gameboard as gameboard
+import rules.hexcell as hexcell
+import rules.piece as piece
 import math
 
 

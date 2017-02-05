@@ -1,5 +1,5 @@
 import unittest
-import hexgrid
+import rules.hexgrid as hexgrid
 
 
 class HexGridTestCase(unittest.TestCase):

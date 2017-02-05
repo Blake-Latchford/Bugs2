@@ -1,5 +1,5 @@
 from enum import Enum, unique
-import hexcell
+from . import hexcell
 import math
 
 
