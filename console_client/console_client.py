@@ -22,12 +22,11 @@ class ConsoleClient:
     def __init__(self, gameboard):
         self.gameboard = gameboard
 
-    def move(self):
-        # TODO test for non-player pieces
+    def get_move(self):
         piece_moves = collections.OrderedDict(self.gameboard.get_moves())
 
         if not piece_moves:
-            return False
+            return None
 
         while True:
             for i, source_piece in enumerate(piece_moves.keys()):
@@ -46,14 +45,12 @@ class ConsoleClient:
                 dest_index = 0
             dest = valid_moves[dest_index]
 
-            self.gameboard.place(piece.Piece(
+            return piece.Piece(
                 piece_type=source_piece.piece_type,
                 color=source_piece.color,
                 piece_number=source_piece.piece_number,
                 q=dest.q,
-                r=dest.r))
-
-            return True
+                r=dest.r)
 
 if __name__ == '__main__':
     client = ConsoleClient(gameboard.GameBoard())
