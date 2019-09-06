@@ -27,19 +27,19 @@ class GameBoard(hexgrid.HexGrid):
     def _init_empty(self):
         for color in piece.Color:
             for piece_type, piece_count in self._piece_type_counts.items():
-                if piece_count > 0:
+                for piece_number in range(piece_count):
                     self._unplaced_pieces.add(
-                        piece.Piece(piece_type, color, 0))
+                        piece.Piece(piece_type, color, piece_number))
+        self.player_turn = piece.Color.WHITE
 
     def _init_from_json_object(self, json_object):
-        assert json_object
-
         for json_piece_object in json_object["pieces"]:
             board_piece = piece.Piece(json_object=json_piece_object)
             if board_piece.is_placed():
                 self._placed_pieces.add(board_piece)
             else:
                 self._unplaced_pieces.add(board_piece)
+        self.player_turn = piece.Color[json_object["player_turn"]]
 
     def __eq__(self, other):
         if self._unplaced_pieces != other._unplaced_pieces:
@@ -152,12 +152,14 @@ class GameBoard(hexgrid.HexGrid):
         return (x for x in self._unplaced_pieces if x.color == color)
 
     def get_moves(self):
-        moves = dict()
+        piece_moves = dict()
 
         for piece in self._placed_pieces | self._unplaced_pieces:
-            moves[piece] = piece.get_moves(self)
+            moves = piece.get_moves(self)
+            if moves:
+                piece_moves[piece] = moves
 
-        return moves
+        return piece_moves
 
     def to_json_object(self):
         pieces = [x.to_json_object() for x in self.get_pieces()]

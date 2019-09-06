@@ -83,7 +83,18 @@ class PieceMovementTestCase(unittest.TestCase):
         self.assertNotIn(pocket,
                          self.white_ant_1.get_moves(self.game_board))
 
+    def test_place_wrong_player(self):
+        new_piece = piece.Piece(
+            piece.PieceType.ANT,
+            piece.Color.BLACK,
+            2)
+        self.assertFalse(new_piece.get_moves(self.game_board))
+
+    def test_move_wrong_player(self):
+        self.assertFalse(self.black_ant_1.get_moves(self.game_board))
+
     def test_place_piece(self):
+        self.game_board.player_turn = piece.Color.BLACK
         new_piece = piece.Piece(
             piece.PieceType.ANT,
             piece.Color.BLACK,
@@ -101,6 +112,7 @@ class PieceMovementTestCase(unittest.TestCase):
         self.assert_move_coords(calculated_moves, expected_move_coords)
 
     def test_bee(self):
+        self.game_board.player_turn = piece.Color.BLACK
         calculated_moves = self.black_bee_0.get_moves(self.game_board)
         expected_move_coords = (
             (-3, 1),
@@ -123,6 +135,7 @@ class PieceMovementTestCase(unittest.TestCase):
         self.assert_move_coords(calculated_moves, expected_move_coords)
 
     def test_beetle(self):
+        self.game_board.player_turn = piece.Color.BLACK
         black_beetle_1 = piece.Piece(
             piece.PieceType.BEETLE,
             piece.Color.BLACK,

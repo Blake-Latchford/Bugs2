@@ -74,6 +74,7 @@ class Piece(hexcell.HexCell):
 
         return " ".join([str(x) for x in str_members])
 
+    # TODO why does everything take game_board?
     def get_moves(self, game_board):
         if math.nan in (self.q, self.r, self.s):
             return self._get_placements(game_board)
@@ -93,6 +94,9 @@ class Piece(hexcell.HexCell):
     def _get_placements(self, game_board):
         open_neighbors = set()
         non_enemy_adjacent_open_neighbors = set()
+
+        if game_board.player_turn != self.color:
+            return False
 
         if not game_board.get_placed_pieces():
             return {game_board.get_cell(0, 0)}
@@ -114,6 +118,9 @@ class Piece(hexcell.HexCell):
         return non_enemy_adjacent_open_neighbors
 
     def can_move(self, game_board):
+        if game_board.player_turn != self.color:
+            return False
+
         partitions = [[x] for x in self._get_piece_neighbors(self, game_board)]
 
         if not partitions:  # Only one piece on the board.
