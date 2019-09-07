@@ -43,12 +43,11 @@ class HexCell:
     def has_same_coordinates(self, other):
         """Same as __eq__, but accessible for derived classes."""
 
-        if not self._are_equal_or_nan(self.q, other.q):
-            return False
-        if not self._are_equal_or_nan(self.r, other.r):
-            return False
-        if not self._are_equal_or_nan(self.s, other.s):
-            return False
+        for member_name in ("q", "r", "s"):
+            if not self._are_equal_or_nan(
+                    getattr(self, member_name),
+                    getattr(other, member_name)):
+                return False
         return True
 
     def _are_equal_or_nan(self, first, second):
