@@ -255,12 +255,12 @@ class PieceIndependentTestCase(unittest.TestCase):
         self.assertTrue(new_piece.is_placed())
 
     def test_json_conversion(self):
-        for piece_type in Piece.Creature:
+        for creature in Piece.Creature:
             for color in Piece.Color:
                 for piece_num in range(4):
                     for q, r in ((0, 0), (-4, 63), (math.nan, math.nan)):
                         starting_piece = Piece(
-                            piece_type, color, piece_num, q, r)
+                            creature, color, piece_num, q, r)
                         with self.subTest(starting_piece):
                             json_object = starting_piece.to_json_object()
                             end_piece = Piece(json_object=json_object)

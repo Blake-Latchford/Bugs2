@@ -12,7 +12,7 @@ class ConsoleClient:
         Piece.Color.BLACK: "b"
     }
 
-    _piece_type_dict = {
+    _piece_creature_dict = {
         Piece.Creature.BEE: "B",
         Piece.Creature.SPIDER: "s",
         Piece.Creature.BEETLE: "b",
@@ -51,7 +51,7 @@ class ConsoleClient:
             dest = valid_moves[dest_index]
 
             return Piece(
-                piece_type=piece.piece_type,
+                creature=piece.creature,
                 color=piece.color,
                 piece_number=piece.piece_number,
                 q=dest.q,
@@ -106,7 +106,7 @@ class ConsoleClient:
     def piece_to_string(cls, piece):
         if piece:
             return (cls._piece_color_dict[piece.color] +
-                    cls._piece_type_dict[piece.piece_type] +
+                    cls._piece_creature_dict[piece.creature] +
                     str(piece.piece_number))
 
         return "   "

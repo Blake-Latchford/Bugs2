@@ -6,7 +6,7 @@ import collections
 
 class GameBoard(HexGrid):
 
-    _piece_type_counts = {
+    _piece_creature_counts = {
         Piece.Creature.BEE: 1,
         Piece.Creature.SPIDER: 2,
         Piece.Creature.BEETLE: 2,
@@ -27,10 +27,10 @@ class GameBoard(HexGrid):
 
     def _init_empty(self):
         for color in Piece.Color:
-            for piece_type, piece_count in self._piece_type_counts.items():
+            for creature, piece_count in self._piece_creature_counts.items():
                 for piece_number in range(piece_count):
                     self._unplaced_pieces.add(
-                        Piece(piece_type, color, piece_number))
+                        Piece(creature, color, piece_number))
         self.player_turn = Piece.Color.WHITE
 
     def _init_from_json_object(self, json_object):
@@ -75,13 +75,13 @@ class GameBoard(HexGrid):
         """Get a piece based on its color, type and number."""
         for unplaced_piece in self._unplaced_pieces:
             if (piece.color == unplaced_piece.color and
-                    piece.piece_type == unplaced_piece.piece_type and
+                    piece.creature == unplaced_piece.creature and
                     piece.piece_number == unplaced_piece.piece_number):
                 return unplaced_piece
 
         for placed_piece in self._placed_pieces:
             if (piece.color == placed_piece.color and
-                    piece.piece_type == placed_piece.piece_type and
+                    piece.creature == placed_piece.creature and
                     piece.piece_number == placed_piece.piece_number):
                 return placed_piece
 
@@ -111,11 +111,11 @@ class GameBoard(HexGrid):
             return
 
         next_unplaced_piece = Piece(
-            unplaced_piece.piece_type,
+            unplaced_piece.creature,
             unplaced_piece.color,
             unplaced_piece.piece_number + 1)
 
-        max_piece_count = self._piece_type_counts[unplaced_piece.piece_type]
+        max_piece_count = self._piece_creature_counts[unplaced_piece.creature]
         if next_unplaced_piece.piece_number < max_piece_count:
             self._unplaced_pieces.add(next_unplaced_piece)
         self._unplaced_pieces.remove(unplaced_piece)
@@ -166,13 +166,13 @@ class GameBoard(HexGrid):
         unplaced_types = collections.defaultdict(
             lambda: collections.defaultdict(list))
         for unplaced_piece in self.get_unplaced_pieces(self.player_turn):
-            unplaced_types[unplaced_piece.color][unplaced_piece.piece_type].append(
+            unplaced_types[unplaced_piece.color][unplaced_piece.creature].append(
                 unplaced_piece)
 
         for piece_dict in unplaced_types.values():
-            for piece_type_list in piece_dict.values():
-                piece_type_list.sort(key=lambda x: x.piece_number)
-                unplaced_piece = piece_type_list[0]
+            for creature_list in piece_dict.values():
+                creature_list.sort(key=lambda x: x.piece_number)
+                unplaced_piece = creature_list[0]
                 piece_moves[unplaced_piece] = unplaced_piece.get_moves(self)
 
         return piece_moves

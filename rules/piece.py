@@ -21,7 +21,7 @@ class Piece(hexcell.HexCell):
         WHITE = 0
         BLACK = 1
 
-    def __init__(self, piece_type=None,
+    def __init__(self, creature=None,
                  color=None,
                  piece_number=None,
                  q=math.nan,
@@ -32,12 +32,12 @@ class Piece(hexcell.HexCell):
 
         if json_object:
             super().__init__(json_object["q"], json_object["r"])
-            self.piece_type = self.Creature[json_object["piece_type"]]
+            self.creature = self.Creature[json_object["creature"]]
             self.color = self.Color[json_object["color"]]
             self.piece_number = json_object["piece_number"]
         else:
             super().__init__(q, r)
-            self.piece_type = piece_type
+            self.creature = creature
             self.color = color
             self.piece_number = piece_number
             self.above = None
@@ -46,7 +46,7 @@ class Piece(hexcell.HexCell):
         if not super().__eq__(other):
             return False
 
-        if self.piece_type != other.piece_type:
+        if self.creature != other.creature:
             return False
 
         if self.color != other.color:
@@ -59,21 +59,21 @@ class Piece(hexcell.HexCell):
 
     def __hash__(self):
         return hash((super().__hash__(),
-                     self.piece_type,
+                     self.creature,
                      self.color,
                      self.piece_number))
 
     def __str__(self):
         str_members = [
             self.color.name,
-            self.piece_type.name,
+            self.creature.name,
             self.piece_number]
         return " ".join([str(x) for x in str_members])
 
     def __repr__(self):
         str_members = [
             self.color.name,
-            self.piece_type.name,
+            self.creature.name,
             self.piece_number,
             super().__str__()]
 
@@ -87,7 +87,7 @@ class Piece(hexcell.HexCell):
         if not self.can_move(game_board):
             return []
 
-        method_name = "get_moves_" + self.piece_type.name
+        method_name = "get_moves_" + self.creature.name
         return getattr(self, method_name)(game_board)
 
     def _get_placements(self, game_board):
@@ -258,7 +258,7 @@ class Piece(hexcell.HexCell):
 
     def get_moved_absolute(self, q, r):
         return Piece(
-            self.piece_type,
+            self.creature,
             self.color,
             self.piece_number,
             q, r)
@@ -278,7 +278,7 @@ class Piece(hexcell.HexCell):
 
     def to_json_object(self):
         json_object = dict()
-        json_object["piece_type"] = self.piece_type.name
+        json_object["creature"] = self.creature.name
         json_object["color"] = self.color.name
         json_object["piece_number"] = self.piece_number
         json_object["q"] = self.q

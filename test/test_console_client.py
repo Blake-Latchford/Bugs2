@@ -119,15 +119,15 @@ class ConsoleClinetGameStateTestCase(unittest.TestCase):
             self.game_state)
 
     def test_piece_to_string(self):
-        for piece_type, piece_type_string in self.console_clinet._piece_type_dict.items():
-            for piece_color, piece_color_string in self.console_clinet._piece_color_dict.items():
-                test_piece = Piece(piece_type, piece_color, 0)
+        for creature, creature_string in self.console_clinet._piece_creature_dict.items():
+            for color, color_string in self.console_clinet._piece_color_dict.items():
+                test_piece = Piece(creature, color, 0)
                 with self.subTest(test_piece):
                     test_piece_string = self.console_clinet.piece_to_string(
                         test_piece)
-                    self.assertIn(piece_type_string,
+                    self.assertIn(creature_string,
                                   test_piece_string)
-                    self.assertIn(piece_color_string,
+                    self.assertIn(color_string,
                                   test_piece_string)
                     self.assertIn(str(test_piece.piece_number),
                                   test_piece_string)
