@@ -125,6 +125,17 @@ class GameBoardTestCase(unittest.TestCase):
         self.assertIn(self.black_beetle_0,
                       self.game_board.get_placed_pieces())
 
+        self.game_board.force_place(piece.Piece(
+            piece.PieceType.BEETLE,
+            piece.Color.WHITE,
+            0,
+            0, -1
+        ))
+
+        self.assertIs(self.black_beetle_0,
+                      self.game_board.get_cell(
+                          self.black_beetle_0.q, self.black_beetle_0.r))
+
     def test_piece_unstacking(self):
         beetle_on_top_of_hive = piece.Piece(
             piece.PieceType.BEETLE,
