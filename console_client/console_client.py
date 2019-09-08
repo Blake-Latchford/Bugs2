@@ -7,16 +7,16 @@ class ConsoleClient:
 
     # TODO these are needed to print the board.
     _piece_color_dict = {
-        "w": piece.Color.WHITE,
-        "b": piece.Color.BLACK
+        piece.Color.WHITE: "w",
+        piece.Color.BLACK: "b"
     }
 
     _piece_type_dict = {
-        "B": piece.PieceType.BEE,
-        "s": piece.PieceType.SPIDER,
-        "b": piece.PieceType.BEETLE,
-        "g": piece.PieceType.GRASSHOPPER,
-        "a": piece.PieceType.ANT
+        piece.PieceType.BEE: "B",
+        piece.PieceType.SPIDER: "s",
+        piece.PieceType.BEETLE: "b",
+        piece.PieceType.GRASSHOPPER: "g",
+        piece.PieceType.ANT: "a",
     }
 
     def __init__(self, gameboard):
@@ -29,6 +29,7 @@ class ConsoleClient:
             return None
 
         while True:
+            print(self.game_state_as_string())
             for i, source_piece in enumerate(piece_moves.keys()):
                 print(str(i) + ") " + str(source_piece))
 
@@ -52,8 +53,66 @@ class ConsoleClient:
                 q=dest.q,
                 r=dest.r)
 
+    def game_state_as_string(self):
+        result = "Current player: " + str(self.gameboard.player_turn) + "\n"
+
+        pieces_by_offset_coords = self._get_pieces_by_offset_coords()
+        max_x, min_x, max_y, min_y = self._get_max_offset_coords(
+            pieces_by_offset_coords.keys())
+
+        for y in range(min_y, max_y + 1):
+            # Offset odd rows.
+            if y % 2 == 1:
+                result += "  "
+
+            for x in range(min_x, max_x + 1):
+                coord = (x, y)
+                if coord in pieces_by_offset_coords:
+                    p = pieces_by_offset_coords[(x, y)]
+                else:
+                    p = None
+                result += self.piece_to_string(p)
+                result += " "
+
+            result += "\n"
+
+        return result
+
+    def _get_pieces_by_offset_coords(self):
+        pices_by_offset_coords = collections.defaultdict()
+        for placed_piece in self.gameboard.get_placed_pieces():
+            offset_coords = placed_piece.get_offset_coords()
+            pices_by_offset_coords[offset_coords] = placed_piece
+        return pices_by_offset_coords
+
+    @staticmethod
+    def _get_max_offset_coords(offset_coords):
+        if not offset_coords:
+            return 0, 0, 0, 0
+
+        max_x = max(coord[0] for coord in offset_coords)
+        min_x = min(coord[0] for coord in offset_coords)
+        max_y = max(coord[1] for coord in offset_coords)
+        min_y = min(coord[1] for coord in offset_coords)
+
+        return max_x, min_x, max_y, min_y
+
+    @classmethod
+    def piece_to_string(cls, target_piece):
+        if target_piece:
+            return (cls._piece_color_dict[target_piece.color] +
+                    cls._piece_type_dict[target_piece.piece_type] +
+                    str(target_piece.piece_number))
+
+        return "   "
+
+
 if __name__ == '__main__':
     client = ConsoleClient(gameboard.GameBoard())
-    while client.move():
-        pass
+    while True:
+        move = client.get_move()
+        print(move)
+        if not move:
+            break
+        client.gameboard.place(move)
     print("Server Terminated.")
