@@ -105,9 +105,9 @@ class GameBoardTestCase(unittest.TestCase):
 
     def test_get_unplaced_pieces(self):
         unplaced_pieces = self.game_board.get_unplaced_pieces()
-        for piece in self.starting_pieces:
-            with self.subTest(str(piece)):
-                self.assertNotIn(piece, unplaced_pieces)
+        for starting_piece in self.starting_pieces:
+            with self.subTest(str(starting_piece)):
+                self.assertNotIn(starting_piece, unplaced_pieces)
 
     def test_piece_stacking(self):
         beetle_on_top_of_hive = piece.Piece(
@@ -187,8 +187,29 @@ class GameBoardTestCase(unittest.TestCase):
                     list(starting_piece.get_moves(self.game_board)),
                     list(available_moves[starting_piece]))
 
+        self.assertNotIn(
+            self.game_board._get_piece(piece.Piece(
+                piece.PieceType.GRASSHOPPER,
+                piece.Color.WHITE,
+                2
+            )),
+            available_moves.keys()
+        )
+
     def test_json_conversion(self):
         json_object = self.game_board.to_json_object()
         end_game_board = gameboard.GameBoard(json_object=json_object)
+
+        # More granular assertions than below - priovide more info on failure.
+        self.assertFalse(
+            end_game_board._placed_pieces - self.game_board._placed_pieces)
+        self.assertFalse(
+            self.game_board._placed_pieces - end_game_board._placed_pieces)
+
+        self.assertFalse(
+            end_game_board._unplaced_pieces - self.game_board._unplaced_pieces)
+        self.assertFalse(
+            self.game_board._unplaced_pieces - end_game_board._unplaced_pieces)
+
         self.assertEqual(self.game_board, end_game_board)
         self.assertIsNot(self.game_board, end_game_board)
