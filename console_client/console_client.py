@@ -1,4 +1,5 @@
 import collections
+import os
 import rules.piece as piece
 import rules.gameboard as gameboard
 
@@ -28,7 +29,10 @@ class ConsoleClient:
         if not piece_moves:
             return None
 
+        print("\n" * 100)
+
         while True:
+            print("")
             print(self.game_state_as_string())
             for i, source_piece in enumerate(piece_moves.keys()):
                 print(str(i) + ") " + str(source_piece))
@@ -54,7 +58,8 @@ class ConsoleClient:
                 r=dest.r)
 
     def game_state_as_string(self):
-        result = "Current player: " + str(self.gameboard.player_turn) + "\n"
+        result = "Current player: " + \
+            str(self.gameboard.player_turn.name) + "\n"
 
         pieces_by_offset_coords = self._get_pieces_by_offset_coords()
         max_x, min_x, max_y, min_y = self._get_max_offset_coords(
@@ -106,12 +111,10 @@ class ConsoleClient:
 
         return "   "
 
-
 if __name__ == '__main__':
     client = ConsoleClient(gameboard.GameBoard())
     while True:
         move = client.get_move()
-        print(move)
         if not move:
             break
         client.gameboard.place(move)

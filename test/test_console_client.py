@@ -124,7 +124,7 @@ class ConsoleClinetGameStateTestCase(unittest.TestCase):
 
     def test_player_turn(self):
         self.assertIn(
-            str(self.game_board.player_turn),
+            str(self.game_board.player_turn.name),
             self.game_state)
 
     def test_piece_to_string(self):
