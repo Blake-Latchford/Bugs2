@@ -113,15 +113,6 @@ class ConsoleClinetGameStateTestCase(unittest.TestCase):
                     placed_piece)
                 self.assertIn(placed_piece_string, self.game_state)
 
-    def test_contains_unplaced_pieces(self):
-        unplaced_pieces = self.game_board.get_unplaced_pieces(
-            self.game_board.player_turn)
-        for unplaced_piece in unplaced_pieces:
-            with self.subTest(unplaced_piece):
-                unplaced_piece_string = self.console_clinet.piece_to_string(
-                    unplaced_piece)
-                self.assertIn(unplaced_piece_string, self.game_state)
-
     def test_player_turn(self):
         self.assertIn(
             str(self.game_board.player_turn.name),
