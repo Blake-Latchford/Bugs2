@@ -1,6 +1,7 @@
 from . import hexgrid
 from . import piece
 import math
+import collections
 
 
 class GameBoard(hexgrid.HexGrid):
@@ -51,6 +52,7 @@ class GameBoard(hexgrid.HexGrid):
     def place(self, new_piece):
         local_instance = self._get_piece(new_piece)
         assert local_instance
+        assert new_piece.color == self.player_turn
 
         available_moves = local_instance.get_moves(self)
         if self.get_cell(new_piece.q, new_piece.r) not in available_moves:
@@ -58,6 +60,7 @@ class GameBoard(hexgrid.HexGrid):
                              str(local_instance) + " to " + str(new_piece))
 
         self.force_place(new_piece)
+        self.player_turn = new_piece.opposite_color()
 
     def force_place(self, new_piece):
         """Like place, but doesn't verify game mechanics.
@@ -152,7 +155,7 @@ class GameBoard(hexgrid.HexGrid):
         return (x for x in self._unplaced_pieces if x.color == color)
 
     def get_moves(self):
-        piece_moves = dict()
+        piece_moves = collections.defaultdict(list)
 
         for piece in self._placed_pieces | self._unplaced_pieces:
             moves = piece.get_moves(self)
@@ -163,4 +166,7 @@ class GameBoard(hexgrid.HexGrid):
 
     def to_json_object(self):
         pieces = [x.to_json_object() for x in self.get_pieces()]
-        return {"pieces": pieces}
+        return {
+            "pieces": pieces,
+            "player_turn": self.player_turn.name
+        }

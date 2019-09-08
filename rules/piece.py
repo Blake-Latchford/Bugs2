@@ -98,8 +98,14 @@ class Piece(hexcell.HexCell):
         if game_board.player_turn != self.color:
             return False
 
-        if not game_board.get_placed_pieces():
-            return {game_board.get_cell(0, 0)}
+        if not list(game_board.get_placed_pieces(self.color)):
+            oppisite_pieces = list(game_board.get_placed_pieces(
+                self.opposite_color()))
+            if not oppisite_pieces:
+                return {game_board.get_cell(0, 0)}
+
+            assert len(oppisite_pieces) == 1
+            return oppisite_pieces[0].get_neighbors(game_board)
 
         for piece in game_board.get_placed_pieces(self.color):
             for open_neighbor in piece._get_space_neighbors(piece, game_board):
@@ -265,6 +271,11 @@ class Piece(hexcell.HexCell):
     @classmethod
     def _is_space(cls, hex_cell):
         return not cls.is_piece(hex_cell)
+
+    def opposite_color(self):
+        if self.color == Color.WHITE:
+            return Color.BLACK
+        return Color.WHITE
 
     def to_json_object(self):
         json_object = dict()

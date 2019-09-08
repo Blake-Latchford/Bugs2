@@ -226,6 +226,19 @@ class PieceIndependentTestCase(unittest.TestCase):
             0)
         self.assertTrue(new_piece.get_moves(empty_gameboard))
 
+    def test_place_second_move(self):
+        test_gameboard = gameboard.GameBoard()
+        test_gameboard.place(
+            piece.Piece(
+                piece.PieceType.SPIDER,
+                piece.Color.WHITE,
+                0, 0, 0))
+        new_piece = piece.Piece(
+            piece.PieceType.SPIDER,
+            piece.Color.BLACK,
+            0)
+        self.assertTrue(new_piece.get_moves(test_gameboard))
+
     def test_is_not_placed(self):
         new_piece = piece.Piece(
             piece.PieceType.SPIDER,
