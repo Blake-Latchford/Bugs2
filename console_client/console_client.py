@@ -1,7 +1,7 @@
 import collections
 import os
 from rules.piece import Piece
-from rules.gameboard import GameBoard
+from rules.game_board import GameBoard
 
 
 class ConsoleClient:
@@ -20,11 +20,11 @@ class ConsoleClient:
         Piece.Creature.ANT: "a",
     }
 
-    def __init__(self, gameboard):
-        self.gameboard = gameboard
+    def __init__(self, game_board):
+        self.game_board = game_board
 
     def get_move(self):
-        piece_moves = collections.OrderedDict(self.gameboard.get_moves())
+        piece_moves = collections.OrderedDict(self.game_board.get_moves())
 
         if not piece_moves:
             return None
@@ -59,7 +59,7 @@ class ConsoleClient:
 
     def game_state_as_string(self):
         result = "Current player: " + \
-            str(self.gameboard.player_turn.name) + "\n"
+            str(self.game_board.player_turn.name) + "\n"
 
         pieces_by_offset_coords = self._get_pieces_by_offset_coords()
         max_x, min_x, max_y, min_y = self._get_max_offset_coords(
@@ -85,7 +85,7 @@ class ConsoleClient:
 
     def _get_pieces_by_offset_coords(self):
         pices_by_offset_coords = collections.defaultdict()
-        for placed_piece in self.gameboard.get_placed_pieces():
+        for placed_piece in self.game_board.get_placed_pieces():
             offset_coords = placed_piece.get_offset_coords()
             pices_by_offset_coords[offset_coords] = placed_piece
         return pices_by_offset_coords
@@ -117,5 +117,5 @@ if __name__ == '__main__':
         move = client.get_move()
         if not move:
             break
-        client.gameboard.place(move)
+        client.game_board.place(move)
     print("Server Terminated.")

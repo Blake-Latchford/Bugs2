@@ -1,5 +1,5 @@
 import unittest
-from rules.gameboard import GameBoard
+from rules.game_board import GameBoard
 from rules.piece import Piece
 
 

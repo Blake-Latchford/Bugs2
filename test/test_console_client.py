@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from rules.gameboard import GameBoard
+from rules.game_board import GameBoard
 from rules.piece import Piece
 from console_client.console_client import ConsoleClient
 
@@ -11,9 +11,9 @@ class ConsoleClientInputTestCase(unittest.TestCase):
     def test_first_moves(self, input_magic_mock):
         for i in range(len(GameBoard().get_moves())):
             with self.subTest(i):
-                new_gameboard = GameBoard()
+                new_game_board = GameBoard()
                 new_console_client = ConsoleClient(
-                    new_gameboard)
+                    new_game_board)
 
                 selections = [str(x) for x in (i, 0, 0)]
                 input_magic_mock.reset_mock()
@@ -21,11 +21,11 @@ class ConsoleClientInputTestCase(unittest.TestCase):
 
                 result = new_console_client.get_move()
                 self.assertTrue(result)
-                new_gameboard.place(result)
+                new_game_board.place(result)
 
                 result = new_console_client.get_move()
                 self.assertTrue(result)
-                new_gameboard.place(result)
+                new_game_board.place(result)
 
                 self.assertEqual(
                     input_magic_mock.call_count,

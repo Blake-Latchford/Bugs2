@@ -1,5 +1,5 @@
 import unittest
-from rules.gameboard import GameBoard
+from rules.game_board import GameBoard
 from rules.hexcell import HexCell
 from rules.piece import Piece
 import math
@@ -218,17 +218,17 @@ class PieceMovementTestCase(unittest.TestCase):
 
 class PieceIndependentTestCase(unittest.TestCase):
 
-    def test_place_in_empty_gameboard(self):
-        empty_gameboard = GameBoard()
+    def test_place_in_empty_game_board(self):
+        empty_game_board = GameBoard()
         new_piece = Piece(
             Piece.Creature.SPIDER,
             Piece.Color.WHITE,
             0)
-        self.assertTrue(new_piece.get_moves(empty_gameboard))
+        self.assertTrue(new_piece.get_moves(empty_game_board))
 
     def test_place_second_move(self):
-        test_gameboard = GameBoard()
-        test_gameboard.place(
+        test_game_board = GameBoard()
+        test_game_board.place(
             Piece(
                 Piece.Creature.SPIDER,
                 Piece.Color.WHITE,
@@ -237,7 +237,7 @@ class PieceIndependentTestCase(unittest.TestCase):
             Piece.Creature.SPIDER,
             Piece.Color.BLACK,
             0)
-        self.assertTrue(new_piece.get_moves(test_gameboard))
+        self.assertTrue(new_piece.get_moves(test_game_board))
 
     def test_is_not_placed(self):
         new_piece = Piece(
