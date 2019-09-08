@@ -78,7 +78,7 @@ class HexCellTestCase(unittest.TestCase):
     def test_origin_neighbors(self):
         hex_grid = hexgrid.HexGrid()
         origin = hexcell.HexCell(0, 0)
-        neighbor_coordinates = (
+        expected_neighbors = (
             (1, -1),
             (1, 0),
             (0, 1),
@@ -86,15 +86,18 @@ class HexCellTestCase(unittest.TestCase):
             (-1, 0),
             (0, -1)
         )
-        neighbor_hexes = [hex_grid.get_cell(q, r)
-                          for q, r in neighbor_coordinates]
 
-        self.assertEqual(list(origin.get_neighbors(hex_grid)), neighbor_hexes)
+        neighbors = list(origin.get_neighbors(hex_grid))
+
+        for neighbor_coordinate in expected_neighbors:
+            with self.subTest(neighbor_coordinate):
+                cell = hex_grid.get_cell(*neighbor_coordinate)
+                self.assertIn(cell, neighbors)
 
     def test_non_origin_neighbors(self):
         hex_grid = hexgrid.HexGrid()
         center = hexcell.HexCell(2, -2)
-        neighbor_coordinates = (
+        expected_neighbors = (
             (3, -3),
             (3, -2),
             (2, -1),
@@ -102,7 +105,36 @@ class HexCellTestCase(unittest.TestCase):
             (1, -2),
             (2, -3)
         )
-        neighbor_hexes = [hex_grid.get_cell(q, r)
-                          for q, r in neighbor_coordinates]
 
-        self.assertEqual(list(center.get_neighbors(hex_grid)), neighbor_hexes)
+        neighbors = list(center.get_neighbors(hex_grid))
+
+        for neighbor_coordinate in expected_neighbors:
+            with self.subTest(neighbor_coordinate):
+                cell = hex_grid.get_cell(*neighbor_coordinate)
+                self.assertIn(cell, neighbors)
+
+    def test_get_offset_cords(self):
+        equivalent_coords = (
+            ((0, 0), (0, 0)),
+            ((7, 0), (7, 0)),
+            ((-15, 0), (-15, 0)),
+            ((-1, 2), (0, 2)),
+            ((1, -2), (0, -2)),
+            ((1, 2), (2, 2)),
+            ((-1, -2), (-2, -2)),
+            ((-3, 2), (-2, +2)),
+            ((3, -2), (2, -2)),
+            ((2, -2), (1, -2)),
+        )
+
+        for axial, offset in equivalent_coords:
+            hex_cell = hexcell.HexCell(*axial)
+
+            with self.subTest(hex_cell):
+                self.assertEqual(
+                    hex_cell.get_offset_coords(),
+                    offset)
+                self.assertEqual(
+                    hex_cell,
+                    hexcell.HexCell.from_offset_cords(offset)
+                )

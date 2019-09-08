@@ -24,12 +24,12 @@ class HexCell:
     """
 
     _direction_coord_change = {
-        Direction.Q_POS: (+1, -1,  0),
-        Direction.R_POS: (+1,  0, -1),
-        Direction.S_POS: (0, +1, -1),
-        Direction.Q_NEG: (-1, +1,  0),
-        Direction.R_NEG: (-1,  0, +1),
-        Direction.S_NEG: (0, -1, +1)
+        Direction.Q_POS: (+1, +0, -1),
+        Direction.R_POS: (+0, +1, -1),
+        Direction.S_POS: (+1, -1, +0),
+        Direction.Q_NEG: (-1, +0, +1),
+        Direction.R_NEG: (+0, -1, +1),
+        Direction.S_NEG: (-1, +1, +0)
     }
 
     def __init__(self, q, r):
@@ -100,3 +100,17 @@ class HexCell:
         assert q + r + s == 0
 
         return hex_grid.get_cell(q, r)
+
+    def get_offset_coords(self):
+        col = self.q + (self.r - (self.r & 1)) // 2
+        row = self.r
+
+        return (col, row)
+
+    @staticmethod
+    def from_offset_cords(offset_cords):
+        col, row = offset_cords
+
+        q = col - (row - (row & 1)) // 2
+        r = row
+        return HexCell(q, r)
