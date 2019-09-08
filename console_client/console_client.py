@@ -34,12 +34,12 @@ class ConsoleClient:
         while True:
             print("")
             print(self.game_state_as_string())
-            for i, source_piece in enumerate(piece_moves.keys()):
-                print(str(i) + ") " + str(source_piece))
+            for i, piece in enumerate(piece_moves.keys()):
+                print(str(i) + ") " + str(piece))
 
-            source_piece_index = int(input("Select source piece number:"))
-            source_piece, valid_moves = \
-                list(piece_moves.items())[source_piece_index]
+            piece_index = int(input("Select source piece number:"))
+            piece, valid_moves = \
+                list(piece_moves.items())[piece_index]
             valid_moves = list(valid_moves)
 
             if len(valid_moves) > 1:
@@ -51,9 +51,9 @@ class ConsoleClient:
             dest = valid_moves[dest_index]
 
             return Piece(
-                piece_type=source_piece.piece_type,
-                color=source_piece.color,
-                piece_number=source_piece.piece_number,
+                piece_type=piece.piece_type,
+                color=piece.color,
+                piece_number=piece.piece_number,
                 q=dest.q,
                 r=dest.r)
 
@@ -103,11 +103,11 @@ class ConsoleClient:
         return max_x, min_x, max_y, min_y
 
     @classmethod
-    def piece_to_string(cls, target_piece):
-        if target_piece:
-            return (cls._piece_color_dict[target_piece.color] +
-                    cls._piece_type_dict[target_piece.piece_type] +
-                    str(target_piece.piece_number))
+    def piece_to_string(cls, piece):
+        if piece:
+            return (cls._piece_color_dict[piece.color] +
+                    cls._piece_type_dict[piece.piece_type] +
+                    str(piece.piece_number))
 
         return "   "
 
