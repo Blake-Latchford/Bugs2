@@ -33,3 +33,6 @@ class HexGrid:
 
     def reset(self):
         self._registered_cells = {}
+
+    def __repr__(self):
+        return repr(self._registered_cells)

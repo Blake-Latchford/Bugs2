@@ -69,6 +69,13 @@ class Piece(hexcell.HexCell):
         str_members = [
             self.color.name,
             self.piece_type.name,
+            self.piece_number]
+        return " ".join([str(x) for x in str_members])
+
+    def __repr__(self):
+        str_members = [
+            self.color.name,
+            self.piece_type.name,
             self.piece_number,
             super().__str__()]
 
