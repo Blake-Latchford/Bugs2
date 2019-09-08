@@ -1,17 +1,17 @@
-from . import hexgrid
-from . import piece
+from rules.hexgrid import HexGrid
+from rules.piece import Piece
 import math
 import collections
 
 
-class GameBoard(hexgrid.HexGrid):
+class GameBoard(HexGrid):
 
     _piece_type_counts = {
-        piece.PieceType.BEE: 1,
-        piece.PieceType.SPIDER: 2,
-        piece.PieceType.BEETLE: 2,
-        piece.PieceType.GRASSHOPPER: 3,
-        piece.PieceType.ANT: 3
+        Piece.Creature.BEE: 1,
+        Piece.Creature.SPIDER: 2,
+        Piece.Creature.BEETLE: 2,
+        Piece.Creature.GRASSHOPPER: 3,
+        Piece.Creature.ANT: 3
     }
 
     def __init__(self, json_object=None):
@@ -26,21 +26,21 @@ class GameBoard(hexgrid.HexGrid):
             self._init_from_json_object(json_object)
 
     def _init_empty(self):
-        for color in piece.Color:
+        for color in Piece.Color:
             for piece_type, piece_count in self._piece_type_counts.items():
                 for piece_number in range(piece_count):
                     self._unplaced_pieces.add(
-                        piece.Piece(piece_type, color, piece_number))
-        self.player_turn = piece.Color.WHITE
+                        Piece(piece_type, color, piece_number))
+        self.player_turn = Piece.Color.WHITE
 
     def _init_from_json_object(self, json_object):
         for json_piece_object in json_object["pieces"]:
-            board_piece = piece.Piece(json_object=json_piece_object)
+            board_piece = Piece(json_object=json_piece_object)
             if board_piece.is_placed():
                 self._register_new_piece(board_piece)
             else:
                 self._unplaced_pieces.add(board_piece)
-        self.player_turn = piece.Color[json_object["player_turn"]]
+        self.player_turn = Piece.Color[json_object["player_turn"]]
 
     def __eq__(self, other):
         if self._unplaced_pieces != other._unplaced_pieces:
@@ -110,7 +110,7 @@ class GameBoard(hexgrid.HexGrid):
         if unplaced_piece not in self._unplaced_pieces:
             return
 
-        next_unplaced_piece = piece.Piece(
+        next_unplaced_piece = Piece(
             unplaced_piece.piece_type,
             unplaced_piece.color,
             unplaced_piece.piece_number + 1)
@@ -132,7 +132,7 @@ class GameBoard(hexgrid.HexGrid):
 
     def _register_new_piece(self, new_piece):
         bottom_piece = self.get_cell(new_piece.q, new_piece.r)
-        if piece.Piece.is_piece(bottom_piece):
+        if Piece.is_piece(bottom_piece):
             self.unregister_cell(bottom_piece)
             new_piece.above = bottom_piece
 

@@ -1,11 +1,11 @@
 import unittest
-import rules.hexgrid as hexgrid
+from rules.hexgrid import HexGrid
 
 
 class HexGridTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.hex_grid = hexgrid.HexGrid()
+        self.hex_grid = HexGrid()
         self.origin_cell = self.hex_grid.get_cell(0, 0)
         self.hex_grid.register_cell(self.origin_cell)
 

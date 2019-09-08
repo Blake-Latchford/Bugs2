@@ -1,83 +1,83 @@
 import unittest
-import rules.hexcell as hexcell
-import rules.hexgrid as hexgrid
 import math
+from rules.hexcell import HexCell
+from rules.hexgrid import HexGrid
 
 
 class HexCellTestCase(unittest.TestCase):
 
     def test_equal(self):
-        first = hexcell.HexCell(1, 2)
-        second = hexcell.HexCell(1, 2)
-        third = hexcell.HexCell(2, 2)
+        first = HexCell(1, 2)
+        second = HexCell(1, 2)
+        third = HexCell(2, 2)
 
         self.assertTrue(first == second)
         self.assertFalse(first == third)
 
     def test_not_equal(self):
-        first = hexcell.HexCell(1, 2)
-        second = hexcell.HexCell(1, 2)
-        third = hexcell.HexCell(2, 2)
+        first = HexCell(1, 2)
+        second = HexCell(1, 2)
+        third = HexCell(2, 2)
 
         self.assertFalse(first != second)
         self.assertTrue(first != third)
 
     def test_nan_equal(self):
-        first = hexcell.HexCell(math.nan, math.nan)
-        second = hexcell.HexCell(math.nan, math.nan)
+        first = HexCell(math.nan, math.nan)
+        second = HexCell(math.nan, math.nan)
 
         self.assertEqual(first, second)
 
     def test_difference_zero(self):
-        first = hexcell.HexCell(0, 0)
-        second = hexcell.HexCell(0, 0)
-        expected_result = hexcell.HexCell(0, 0)
+        first = HexCell(0, 0)
+        second = HexCell(0, 0)
+        expected_result = HexCell(0, 0)
 
         self.assertEqual(first - second, expected_result)
 
     def test_difference_neighbor(self):
-        first = hexcell.HexCell(0, 0)
-        second = hexcell.HexCell(0, 1)
-        expected_result = hexcell.HexCell(0, -1)
+        first = HexCell(0, 0)
+        second = HexCell(0, 1)
+        expected_result = HexCell(0, -1)
 
         self.assertEqual(first - second, expected_result)
 
     def test_difference_oddball(self):
-        first = hexcell.HexCell(-1, 0)
-        second = hexcell.HexCell(1, 1)
-        expected_result = hexcell.HexCell(-2, -1)
+        first = HexCell(-1, 0)
+        second = HexCell(1, 1)
+        expected_result = HexCell(-2, -1)
 
         self.assertEqual(first - second, expected_result)
 
     def test_addition(self):
-        first = hexcell.HexCell(2, 0)
-        second = hexcell.HexCell(3, -5)
-        expected_result = hexcell.HexCell(5, -5)
+        first = HexCell(2, 0)
+        second = HexCell(3, -5)
+        expected_result = HexCell(5, -5)
 
         self.assertEqual(first + second, expected_result)
 
     def test_hashable(self):
-        origin = hexcell.HexCell(0, 0)
-        non_origin = hexcell.HexCell(0, 1)
+        origin = HexCell(0, 0)
+        non_origin = HexCell(0, 1)
         self.assertNotEqual(hash(origin), hash(non_origin))
 
     def test_rotate_clockwise(self):
-        original = hexcell.HexCell(-2, -1)
-        expected_result = hexcell.HexCell(-3, 2)
+        original = HexCell(-2, -1)
+        expected_result = HexCell(-3, 2)
         calculated_result = original.rotate_clockwise_about_origin()
 
         self.assertEqual(expected_result, calculated_result)
 
     def test_rotate_counterclockwise(self):
-        original = hexcell.HexCell(-2, -1)
-        expected_result = hexcell.HexCell(1, -3)
+        original = HexCell(-2, -1)
+        expected_result = HexCell(1, -3)
         calculated_result = original.rotate_counterclockwise_about_origin()
 
         self.assertEqual(expected_result, calculated_result)
 
     def test_origin_neighbors(self):
-        hex_grid = hexgrid.HexGrid()
-        origin = hexcell.HexCell(0, 0)
+        hex_grid = HexGrid()
+        origin = HexCell(0, 0)
         expected_neighbors = (
             (1, -1),
             (1, 0),
@@ -95,8 +95,8 @@ class HexCellTestCase(unittest.TestCase):
                 self.assertIn(cell, neighbors)
 
     def test_non_origin_neighbors(self):
-        hex_grid = hexgrid.HexGrid()
-        center = hexcell.HexCell(2, -2)
+        hex_grid = HexGrid()
+        center = HexCell(2, -2)
         expected_neighbors = (
             (3, -3),
             (3, -2),
@@ -128,7 +128,7 @@ class HexCellTestCase(unittest.TestCase):
         )
 
         for axial, offset in equivalent_coords:
-            hex_cell = hexcell.HexCell(*axial)
+            hex_cell = HexCell(*axial)
 
             with self.subTest(hex_cell):
                 self.assertEqual(
@@ -136,5 +136,5 @@ class HexCellTestCase(unittest.TestCase):
                     offset)
                 self.assertEqual(
                     hex_cell,
-                    hexcell.HexCell.from_offset_cords(offset)
+                    HexCell.from_offset_cords(offset)
                 )

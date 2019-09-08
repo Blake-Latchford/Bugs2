@@ -1,23 +1,23 @@
 import collections
 import os
-import rules.piece as piece
-import rules.gameboard as gameboard
+from rules.piece import Piece
+from rules.gameboard import GameBoard
 
 
 class ConsoleClient:
 
     # TODO these are needed to print the board.
     _piece_color_dict = {
-        piece.Color.WHITE: "w",
-        piece.Color.BLACK: "b"
+        Piece.Color.WHITE: "w",
+        Piece.Color.BLACK: "b"
     }
 
     _piece_type_dict = {
-        piece.PieceType.BEE: "B",
-        piece.PieceType.SPIDER: "s",
-        piece.PieceType.BEETLE: "b",
-        piece.PieceType.GRASSHOPPER: "g",
-        piece.PieceType.ANT: "a",
+        Piece.Creature.BEE: "B",
+        Piece.Creature.SPIDER: "s",
+        Piece.Creature.BEETLE: "b",
+        Piece.Creature.GRASSHOPPER: "g",
+        Piece.Creature.ANT: "a",
     }
 
     def __init__(self, gameboard):
@@ -50,7 +50,7 @@ class ConsoleClient:
                 dest_index = 0
             dest = valid_moves[dest_index]
 
-            return piece.Piece(
+            return Piece(
                 piece_type=source_piece.piece_type,
                 color=source_piece.color,
                 piece_number=source_piece.piece_number,
@@ -112,7 +112,7 @@ class ConsoleClient:
         return "   "
 
 if __name__ == '__main__':
-    client = ConsoleClient(gameboard.GameBoard())
+    client = ConsoleClient(GameBoard())
     while True:
         move = client.get_move()
         if not move:

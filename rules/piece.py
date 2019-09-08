@@ -3,25 +3,23 @@ from . import hexcell
 import math
 
 
-@unique
-class PieceType(Enum):
-    BEE = 0
-    SPIDER = 1
-    BEETLE = 2
-    GRASSHOPPER = 3
-    ANT = 4
-    # MOSQUITO = 5
-    # LADYBUG = 6
-    # PILLBUG = 7
-
-
-@unique
-class Color(Enum):
-    WHITE = 0
-    BLACK = 1
-
-
 class Piece(hexcell.HexCell):
+
+    @unique
+    class Creature(Enum):
+        BEE = 0
+        SPIDER = 1
+        BEETLE = 2
+        GRASSHOPPER = 3
+        ANT = 4
+        # MOSQUITO = 5
+        # LADYBUG = 6
+        # PILLBUG = 7
+
+    @unique
+    class Color(Enum):
+        WHITE = 0
+        BLACK = 1
 
     def __init__(self, piece_type=None,
                  color=None,
@@ -34,8 +32,8 @@ class Piece(hexcell.HexCell):
 
         if json_object:
             super().__init__(json_object["q"], json_object["r"])
-            self.piece_type = PieceType[json_object["piece_type"]]
-            self.color = Color[json_object["color"]]
+            self.piece_type = self.Creature[json_object["piece_type"]]
+            self.color = self.Color[json_object["color"]]
             self.piece_number = json_object["piece_number"]
         else:
             super().__init__(q, r)
@@ -89,14 +87,8 @@ class Piece(hexcell.HexCell):
         if not self.can_move(game_board):
             return []
 
-        piece_moves = {
-            PieceType.BEE: self.get_moves_BEE,
-            PieceType.SPIDER: self.get_moves_SPIDER,
-            PieceType.BEETLE: self.get_moves_BEETLE,
-            PieceType.GRASSHOPPER: self.get_moves_GRASSHOPPER,
-            PieceType.ANT: self.get_moves_ANT
-        }
-        return piece_moves[self.piece_type](game_board)
+        method_name = "get_moves_" + self.piece_type.name
+        return getattr(self, method_name)(game_board)
 
     def _get_placements(self, game_board):
         open_neighbors = set()
@@ -280,9 +272,9 @@ class Piece(hexcell.HexCell):
         return not cls.is_piece(hex_cell)
 
     def opposite_color(self):
-        if self.color == Color.WHITE:
-            return Color.BLACK
-        return Color.WHITE
+        if self.color == self.Color.WHITE:
+            return self.Color.BLACK
+        return self.Color.WHITE
 
     def to_json_object(self):
         json_object = dict()
