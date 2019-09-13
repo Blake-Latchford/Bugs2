@@ -103,8 +103,8 @@ class GameBoard(HexGrid):
                              str(new_piece))
 
     def _remove_replaced_piece(self, replaced_piece):
-        self._remove_unplaced(replaced_piece)
         self._remove_placed(replaced_piece)
+        self._remove_unplaced(replaced_piece)
 
     def _remove_unplaced(self, unplaced_piece):
         if unplaced_piece not in self._unplaced_pieces:
@@ -126,6 +126,11 @@ class GameBoard(HexGrid):
 
         self._placed_pieces.remove(placed_piece)
         self.unregister_cell(placed_piece)
+        self._unplaced_pieces.add(placed_piece)
+
+        placed_piece.q = math.nan
+        placed_piece.r = math.nan
+        placed_piece.s = math.nan
 
         if placed_piece.above:
             self.register_cell(placed_piece.above)
@@ -157,12 +162,37 @@ class GameBoard(HexGrid):
     def get_moves(self):
         piece_moves = collections.defaultdict(list)
 
+        piece_moves.update(self._get_placed_moves())
+        piece_moves.update(self._get_unplaced_moves())
+
+        return piece_moves
+
+    def _get_placed_moves(self):
+        piece_moves = collections.defaultdict(list)
+
+        if self.bee_is_unplaced(self.player_turn):
+            return piece_moves
+
         for placed_piece in self.get_placed_pieces(self.player_turn):
             moves = placed_piece.get_moves(self)
             if moves:
                 piece_moves[placed_piece] = moves
+        return piece_moves
 
-        # Remove later numbers of the same unplaced piece.
+    def _get_unplaced_moves(self):
+        piece_moves = collections.defaultdict(list)
+        must_place_bee = self._must_place_bee()
+
+        for piece in self._get_lowest_numbered_piece_by_creature():
+            if must_place_bee:
+                if piece.creature == Piece.Creature.BEE:
+                    piece_moves[piece] = piece.get_moves(self)
+            else:
+                piece_moves[piece] = piece.get_moves(self)
+
+        return piece_moves
+
+    def _get_lowest_numbered_piece_by_creature(self):
         unplaced_types = collections.defaultdict(
             lambda: collections.defaultdict(list))
         for unplaced_piece in self.get_unplaced_pieces(self.player_turn):
@@ -172,10 +202,22 @@ class GameBoard(HexGrid):
         for piece_dict in unplaced_types.values():
             for creature_list in piece_dict.values():
                 creature_list.sort(key=lambda x: x.piece_number)
-                unplaced_piece = creature_list[0]
-                piece_moves[unplaced_piece] = unplaced_piece.get_moves(self)
+                yield creature_list[0]
 
-        return piece_moves
+    def bee_is_unplaced(self, player):
+        for placed_piece in self.get_placed_pieces(player):
+            if placed_piece.creature == Piece.Creature.BEE:
+                return False
+        return True
+
+    def _must_place_bee(self):
+        bee_is_unplaced = self.bee_is_unplaced(
+            self.player_turn)
+        number_of_placed_pieces = len(list(
+            self.get_placed_pieces(self.player_turn)))
+        if bee_is_unplaced and number_of_placed_pieces >= 3:
+            return True
+        return False
 
     def to_json_object(self):
         pieces = [x.to_json_object() for x in self.get_pieces()]

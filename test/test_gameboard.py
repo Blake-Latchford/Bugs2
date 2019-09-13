@@ -200,7 +200,7 @@ class GameBoardTestCase(unittest.TestCase):
         json_object = self.game_board.to_json_object()
         end_game_board = GameBoard(json_object=json_object)
 
-        # More granular assertions than below - priovide more info on failure.
+        # More granular assertions than below - provide more info on failure.
         self.assertFalse(
             end_game_board._placed_pieces - self.game_board._placed_pieces)
         self.assertFalse(
@@ -213,3 +213,33 @@ class GameBoardTestCase(unittest.TestCase):
 
         self.assertEqual(self.game_board, end_game_board)
         self.assertIsNot(self.game_board, end_game_board)
+
+    def test_fourth_move_bee(self):
+        self.game_board._remove_placed(self.white_bee_0)
+        self.game_board._remove_placed(self.black_bee_0)
+
+        piece_moves = self.game_board.get_moves()
+        self.assertEqual(len(piece_moves), 1, piece_moves)
+
+        for piece in piece_moves.keys():
+            self.assertEqual(piece.creature, Piece.Creature.BEE)
+
+    def test_move_before_bee(self):
+        self.game_board._remove_placed(self.white_bee_0)
+        self.game_board._remove_placed(self.black_bee_0)
+        self.game_board._remove_placed(self.black_ant_1)
+        self.game_board._remove_placed(self.white_ant_1)
+
+        piece_moves = self.game_board.get_moves()
+        self.assertNotIn(self.white_ant_0, piece_moves.keys())
+        self.assertNotIn(self.white_spider_0, piece_moves.keys())
+        self.assertIn(self.white_bee_0, piece_moves.keys())
+
+    def test_bee_is_unplaced(self):
+        self.assertFalse(
+            self.game_board.bee_is_unplaced(self.game_board.player_turn))
+
+        self.game_board._remove_placed(self.white_bee_0)
+        self.assertTrue(
+            self.game_board.bee_is_unplaced(
+                Piece.Color.WHITE))
