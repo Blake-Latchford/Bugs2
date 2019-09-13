@@ -2,6 +2,7 @@ import collections
 import os
 from rules.piece import Piece
 from rules.game_board import GameBoard
+from _collections import OrderedDict
 
 
 class ConsoleClient:
@@ -24,7 +25,12 @@ class ConsoleClient:
         self.game_board = game_board
 
     def get_move(self):
-        piece_moves = collections.OrderedDict(self.game_board.get_moves())
+        unsorted_piece_moves = self.game_board.get_moves()
+        sorted_keys = sorted(unsorted_piece_moves.keys())
+
+        piece_moves = collections.OrderedDict()
+        for sorted_key in sorted_keys:
+            piece_moves[sorted_key] = unsorted_piece_moves[sorted_key]
 
         if not piece_moves:
             return None

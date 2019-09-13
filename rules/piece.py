@@ -1,12 +1,15 @@
-from enum import Enum, unique
+from enum import IntEnum, unique
 from . import hexcell
 import math
+import functools
+from _ast import Attribute
 
 
+@functools.total_ordering
 class Piece(hexcell.HexCell):
 
     @unique
-    class Creature(Enum):
+    class Creature(IntEnum):
         BEE = 0
         SPIDER = 1
         BEETLE = 2
@@ -17,7 +20,7 @@ class Piece(hexcell.HexCell):
         # PILLBUG = 7
 
     @unique
-    class Color(Enum):
+    class Color(IntEnum):
         WHITE = 0
         BLACK = 1
 
@@ -41,6 +44,23 @@ class Piece(hexcell.HexCell):
             self.color = color
             self.piece_number = piece_number
             self.above = None
+
+    def __lt__(self, other):
+        attribute_names = [
+            "color",
+            "creature",
+            "piece_number",
+        ]
+
+        for attribute_name in attribute_names:
+            self_attribute = int(getattr(self, attribute_name))
+            other_attribute = int(getattr(other, attribute_name))
+            if self_attribute < other_attribute:
+                return True
+            elif self_attribute > other_attribute:
+                return False
+
+        return False
 
     def __eq__(self, other):
         if not super().__eq__(other):

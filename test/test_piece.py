@@ -293,3 +293,20 @@ class PieceIndependentTestCase(unittest.TestCase):
 
         self.assertEqual(new_piece.q, 15)
         self.assertEqual(new_piece.r, -6)
+
+    def test_comparison(self):
+        first = Piece(
+            Piece.Creature.BEE,
+            Piece.Color.WHITE,
+            0)
+        second = Piece(
+            Piece.Creature.SPIDER,
+            Piece.Color.WHITE,
+            0)
+        third = Piece(
+            Piece.Creature.SPIDER,
+            Piece.Color.BLACK,
+            0)
+
+        self.assertLess(first, second)
+        self.assertLess(second, third)
