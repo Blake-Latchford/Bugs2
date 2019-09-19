@@ -1,8 +1,6 @@
 import collections
-import os
 from rules.piece import Piece
 from rules.game_board import GameBoard
-from _collections import OrderedDict
 
 
 class ConsoleClient:

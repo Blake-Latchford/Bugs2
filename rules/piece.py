@@ -2,7 +2,6 @@ from enum import IntEnum, unique
 from . import hexcell
 import math
 import functools
-from _ast import Attribute
 
 
 @functools.total_ordering
